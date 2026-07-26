@@ -42,7 +42,11 @@ public class DoorView : MonoBehaviour
                 float distance =
                     Vector2.Distance(raisedPosition, player.transform.position);
 
-                if (Door.State.Close == door.state && distance <= openDistance)
+                if (
+                    Door.State.Close == door.state
+                    && distance <= openDistance
+                    && Input.GetKeyDown(KeyCode.E)
+                )
                 {
                     door.Open();
                 }
