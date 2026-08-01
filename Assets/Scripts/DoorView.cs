@@ -4,23 +4,23 @@ public class DoorView : MonoBehaviour
 {
     [SerializeField] private float openDistance = 1.25f;
     [SerializeField] private float closeDistance = 1.75f;
-    [SerializeField] private float animationSpeed = 4.0f;
+    [SerializeField] private float animationSpeed = 6.0f;
 
     private Door door;
     private SpriteRenderer spriteRenderer;
+    private Sprite[] frames;
     private Player player;
-    private Vector3 raisedPosition;
+
     private float raisedAmount;
 
-    public void Init(Door door, SpriteRenderer spriteRenderer, Sprite doorSprite)
+    public void Init(Door door, SpriteRenderer spriteRenderer, Sprite[] frames)
     {
         this.door = door;
         this.spriteRenderer = spriteRenderer;
-        this.spriteRenderer.sprite = doorSprite;
+        this.frames = frames;
 
-        raisedPosition = transform.position;
         raisedAmount = Door.State.Open == door.state ? 0.0f : 1.0f;
-        ApplyHeight();
+        ApplyFrame();
     }
 
     private void Update()
@@ -34,19 +34,16 @@ public class DoorView : MonoBehaviour
         {
             if (null == player)
             {
-                player = FindFirstObjectByType<Player>();
+                player = FindAnyObjectByType<Player>();
             }
 
             if (null != player)
             {
-                float distance =
-                    Vector2.Distance(raisedPosition, player.transform.position);
+                float distance = Vector2.Distance(transform.position, player.transform.position);
 
-                if (
-                    Door.State.Close == door.state
+                if (Door.State.Close == door.state
                     && distance <= openDistance
-                    && Input.GetKeyDown(KeyCode.E)
-                )
+                    && true == Input.GetKeyDown(KeyCode.E))
                 {
                     door.Open();
                 }
@@ -58,29 +55,21 @@ public class DoorView : MonoBehaviour
         }
 
         float targetAmount = Door.State.Open == door.state ? 0.0f : 1.0f;
-        raisedAmount = Mathf.MoveTowards(
-            raisedAmount,
-            targetAmount,
-            animationSpeed * Time.deltaTime
-        );
+        raisedAmount = Mathf.MoveTowards(raisedAmount, targetAmount, animationSpeed * Time.deltaTime);
 
-        ApplyHeight();
+        ApplyFrame();
     }
 
-    private void ApplyHeight()
+    private void ApplyFrame()
     {
-        if (null == spriteRenderer)
+        if (null == spriteRenderer || null == frames || 0 == frames.Length)
         {
             return;
         }
 
-        Vector3 scale = Vector3.one;
-        scale.y = raisedAmount;
-        transform.localScale = scale;
+        int index = Mathf.RoundToInt(raisedAmount * (frames.Length - 1));
+        index = Mathf.Clamp(index, 0, frames.Length - 1);
 
-        transform.position =
-            raisedPosition + Vector3.down * ((1.0f - raisedAmount) * 0.5f);
-
-        spriteRenderer.enabled = 0.01f < raisedAmount;
+        spriteRenderer.sprite = frames[index];
     }
 }

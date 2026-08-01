@@ -18,8 +18,9 @@ public class DungeonGenerator : MonoBehaviour
     private HashSet<Tile> corridorTiles = new HashSet<Tile>();
 
     private DungeonRenderer dungeonRenderer;
+    [SerializeField] private GameObject[] playerPrefabs;
+
     private Player player;
-    [SerializeField] private GameObject playerPrefab;
 
     private void Start()
     {
@@ -62,7 +63,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        dungeonRenderer.Render(tileMap);
+        dungeonRenderer.Render(tileMap, rooms);
 
         SpawnPlayer();
     }
@@ -603,41 +604,70 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     private void SpawnPlayer()
-{
-    if (null != player)
     {
-        GameObject.DestroyImmediate(player.gameObject);
-        player = null;
+        if (null != player)
+        {
+            GameObject.DestroyImmediate(player.gameObject);
+            player = null;
+        }
+
+        Block centerRoom = FindCenterRoom();
+        if (null == centerRoom)
+        {
+            return;
+        }
+
+        Tile spawnTile = FindRoomFloorTile(centerRoom);
+        if (null == spawnTile)
+        {
+            return;
+        }
+
+        GameObject playerObject = null;
+
+        GameObject selectedPrefab = null;
+        if (null != playerPrefabs && 0 < playerPrefabs.Length)
+        {
+            int index = Mathf.Clamp(GameData.selectedCharacter, 0, playerPrefabs.Length - 1);
+            selectedPrefab = playerPrefabs[index];
+        }
+
+        if (null != selectedPrefab)
+        {
+            playerObject = Instantiate(selectedPrefab, transform);
+            playerObject.name = "Player";
+
+            SpriteRenderer prefabRenderer = playerObject.GetComponent<SpriteRenderer>();
+            if (null != prefabRenderer)
+            {
+                prefabRenderer.sortingOrder = 20;
+            }
+
+            player = playerObject.GetComponent<Player>();
+            if (null == player)
+            {
+                player = playerObject.AddComponent<Player>();
+            }
+        }
+        else
+        {
+            playerObject = new GameObject("Player");
+            playerObject.transform.parent = transform;
+
+            SpriteRenderer spriteRenderer = playerObject.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = CreateSquareSprite(Color.red);
+            spriteRenderer.sortingOrder = 20;
+
+            player = playerObject.AddComponent<Player>();
+        }
+
+        Vector2 spawnPosition = new Vector2(
+            centerRoom.rect.center.x,
+            centerRoom.rect.center.y
+        );
+
+        player.Init(tileMap, spawnPosition);
     }
-
-    Block centerRoom = FindCenterRoom();
-    if (null == centerRoom)
-    {
-        return;
-    }
-
-    if (null == playerPrefab)
-    {
-        Debug.LogError("플레이어 프리팹이 설정되지 않았습니다.");
-        return;
-    }
-
-    GameObject playerObject = Instantiate(playerPrefab, transform);
-    playerObject.name = "Player";
-
-    player = playerObject.GetComponent<Player>();
-    if (null == player)
-    {
-        player = playerObject.AddComponent<Player>();
-    }
-
-    Vector2 spawnPosition = new Vector2(
-        centerRoom.rect.center.x,
-        centerRoom.rect.center.y
-    );
-
-    player.Init(tileMap, spawnPosition);
-}
 
     private Block FindCenterRoom()
     {

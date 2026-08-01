@@ -29,14 +29,26 @@ public class DungeonRenderer : MonoBehaviour
     private static List<Sprite> WallCornerOuterLeftTop = new List<Sprite>();
     private static List<Sprite> WallCornerOuterRightTop = new List<Sprite>();
 
-    private static Sprite DoorHorizontal = null;
-    private static Sprite DoorVertical = null;
+    private static List<Sprite> DoorPeaks = new List<Sprite>();
+
+    private static List<Sprite> PropWall = new List<Sprite>();
+    private static List<Sprite> PropCornerLeftTop = new List<Sprite>();
+    private static List<Sprite> PropCornerRightTop = new List<Sprite>();
+    private static List<Sprite> PropFloor = new List<Sprite>();
+    private static List<Sprite> PropBlocking = new List<Sprite>();
+
+    [Header("장식 밀도")]
+    public float propRatePerTile = 0.30f;
+    public int propMaxPerRoom = 8;
+    public float propRateInterior = 0.06f;
+    public int propMaxInteriorPerRoom = 6;
 
     private static bool spritesLoaded = false;
 
-    public void Render(TileMap map)
+    public void Render(TileMap map, List<Block> rooms = null)
     {
         Clear();
+        PropBlock.Clear();
         LoadSprites();
 
         this.tileMap = map;
@@ -83,6 +95,7 @@ public class DungeonRenderer : MonoBehaviour
         }
 
         RenderDoors();
+        RenderProps(rooms);
         FitCamera();
     }
 
@@ -101,13 +114,7 @@ public class DungeonRenderer : MonoBehaviour
                 continue;
             }
 
-            Sprite sprite = DoorVertical;
-            if (Door.Direction.Horizontal == tile.door.direction)
-            {
-                sprite = DoorHorizontal;
-            }
-
-            if (null == sprite)
+            if (0 == DoorPeaks.Count)
             {
                 continue;
             }
@@ -117,11 +124,196 @@ public class DungeonRenderer : MonoBehaviour
             doorObject.transform.position = new Vector3(tile.rect.x + 0.5f, tile.rect.y + 0.5f, 0.0f);
 
             SpriteRenderer spriteRenderer = doorObject.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = sprite;
             spriteRenderer.sortingOrder = 11;
 
             DoorView doorView = doorObject.AddComponent<DoorView>();
-            doorView.Init(tile.door, spriteRenderer, sprite);
+            doorView.Init(tile.door, spriteRenderer, DoorPeaks.ToArray());
+        }
+    }
+
+    private void RenderProps(List<Block> rooms)
+    {
+        if (null == rooms)
+        {
+            return;
+        }
+
+        HashSet<int> used = new HashSet<int>();
+
+        foreach (Block room in rooms)
+        {
+            if (Block.Type.Room != room.type)
+            {
+                continue;
+            }
+
+            int xMin = (int)room.rect.xMin;
+            int xMax = (int)room.rect.xMax - 1;
+            int yMin = (int)room.rect.yMin;
+            int yMax = (int)room.rect.yMax - 1;
+
+            List<Tile> edgeTiles = new List<Tile>();
+            List<Tile> innerTiles = new List<Tile>();
+
+            for (int y = yMin; y <= yMax; y++)
+            {
+                for (int x = xMin; x <= xMax; x++)
+                {
+                    Tile tile = tileMap.GetTile(x, y);
+                    if (null == tile)
+                    {
+                        continue;
+                    }
+
+                    if (Tile.Type.Floor != tile.type)
+                    {
+                        continue;
+                    }
+
+                    if (null != tile.door)
+                    {
+                        continue;
+                    }
+
+                    if (true == IsNearDoor(x, y))
+                    {
+                        continue;
+                    }
+
+                    if (0 < CountAroundWall(x, y))
+                    {
+                        edgeTiles.Add(tile);
+                    }
+                    else
+                    {
+                        innerTiles.Add(tile);
+                    }
+                }
+            }
+
+            Shuffle(edgeTiles);
+            Shuffle(innerTiles);
+
+            int edgeCount = Mathf.RoundToInt(edgeTiles.Count * propRatePerTile);
+            edgeCount = Mathf.Min(edgeCount, propMaxPerRoom);
+            edgeCount = Mathf.Min(edgeCount, edgeTiles.Count);
+
+            for (int i = 0; i < edgeCount; i++)
+            {
+                PlaceProp(edgeTiles[i], used, false);
+            }
+
+            int innerCount = Mathf.RoundToInt(innerTiles.Count * propRateInterior);
+            innerCount = Mathf.Min(innerCount, propMaxInteriorPerRoom);
+            innerCount = Mathf.Min(innerCount, innerTiles.Count);
+
+            for (int i = 0; i < innerCount; i++)
+            {
+                PlaceProp(innerTiles[i], used, true);
+            }
+        }
+    }
+
+    private void PlaceProp(Tile tile, HashSet<int> used, bool interior)
+    {
+        if (true == used.Contains(tile.index))
+        {
+            return;
+        }
+
+        int x = (int)tile.rect.x;
+        int y = (int)tile.rect.y;
+
+        Sprite sprite = null;
+
+        if (false == interior)
+        {
+            bool wallTop = IsWall(tileMap.GetTile(x, y + 1));
+            bool wallLeft = IsWall(tileMap.GetTile(x - 1, y));
+            bool wallRight = IsWall(tileMap.GetTile(x + 1, y));
+
+            if (true == wallTop && true == wallLeft)
+            {
+                sprite = GetRandomSprite(PropCornerLeftTop);
+            }
+            else if (true == wallTop && true == wallRight)
+            {
+                sprite = GetRandomSprite(PropCornerRightTop);
+            }
+
+            if (null == sprite)
+            {
+                sprite = GetRandomSprite(PropWall);
+            }
+        }
+        else
+        {
+            sprite = GetRandomSprite(PropFloor);
+        }
+
+        if (null == sprite)
+        {
+            return;
+        }
+
+        used.Add(tile.index);
+
+        if (true == PropBlocking.Contains(sprite))
+        {
+            PropBlock.Add(tile.index);
+        }
+
+        GameObject propObject = new GameObject($"Prop_{tile.index}");
+        propObject.transform.parent = tileRoot;
+        propObject.transform.position = new Vector3(x + 0.5f, y + 0.5f, 0.0f);
+
+        SpriteRenderer spriteRenderer = propObject.AddComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprite;
+        spriteRenderer.sortingOrder = 12;
+    }
+
+    private bool IsNearDoor(int x, int y)
+    {
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                Tile tile = tileMap.GetTile(x + dx, y + dy);
+                if (null == tile)
+                {
+                    continue;
+                }
+
+                if (null != tile.door)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private int CountAroundWall(int x, int y)
+    {
+        int count = 0;
+
+        if (true == IsWall(tileMap.GetTile(x, y + 1))) { count++; }
+        if (true == IsWall(tileMap.GetTile(x, y - 1))) { count++; }
+        if (true == IsWall(tileMap.GetTile(x - 1, y))) { count++; }
+        if (true == IsWall(tileMap.GetTile(x + 1, y))) { count++; }
+
+        return count;
+    }
+
+    private void Shuffle(List<Tile> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            Tile temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
         }
     }
 
@@ -437,8 +629,35 @@ public class DungeonRenderer : MonoBehaviour
         Add(WallCornerOuterRightTop, "Wall.CornerOuterRightTop_1");
         Add(WallCornerOuterRightTop, "Wall.CornerOuterRightTop_2");
 
-        DoorHorizontal = Resources.Load<Sprite>("Sprites/Door.Horizontal.New");
-        DoorVertical = Resources.Load<Sprite>("Sprites/Door.Vertical.New");
+        DoorPeaks.Clear();
+        Add(DoorPeaks, "Door.Peaks_0");
+        Add(DoorPeaks, "Door.Peaks_1");
+        Add(DoorPeaks, "Door.Peaks_2");
+        Add(DoorPeaks, "Door.Peaks_3");
+
+        PropCornerLeftTop.Clear();
+        Add(PropCornerLeftTop, "Prop.SpiderWeb_1");
+
+        PropCornerRightTop.Clear();
+        Add(PropCornerRightTop, "Prop.SpiderWeb_2");
+
+        PropWall.Clear();
+        Add(PropWall, "Prop.Rubble_1");
+        Add(PropWall, "Prop.Rubble_2");
+        Add(PropWall, "Prop.Bone_1");
+        Add(PropWall, "Prop.Bone_2");
+
+        PropFloor.Clear();
+        Add(PropFloor, "Prop.Bone_1");
+        Add(PropFloor, "Prop.Bone_2");
+        Add(PropFloor, "Prop.Rubble_1");
+        Add(PropFloor, "Prop.Rubble_1");
+        Add(PropFloor, "Prop.Rubble_2");
+        Add(PropFloor, "Prop.Rubble_2");
+
+        PropBlocking.Clear();
+        Add(PropBlocking, "Prop.Rubble_1");
+        Add(PropBlocking, "Prop.Rubble_2");
 
         if (0 == FloorInnerNormal.Count || 0 == WallHorizontalTop.Count)
         {
