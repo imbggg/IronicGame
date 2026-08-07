@@ -19,6 +19,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private DungeonRenderer dungeonRenderer;
     [SerializeField] private GameObject[] playerPrefabs;
+    [SerializeField] private GameObject bossPrefab;
 
     private Player player;
 
@@ -66,6 +67,7 @@ public class DungeonGenerator : MonoBehaviour
         dungeonRenderer.Render(tileMap, rooms);
 
         SpawnPlayer();
+        SpawnBoss();
     }
 
     private void CreateRooms(WeightRandom<int> roomSizeWeightRandom, WeightRandom<Tuple<float, float>> ratioWeightRandom)
@@ -667,6 +669,125 @@ public class DungeonGenerator : MonoBehaviour
         );
 
         player.Init(tileMap, spawnPosition);
+    }
+
+    private void SpawnBoss()
+    {
+        if (null == bossPrefab)
+        {
+            return;
+        }
+
+        if (null == player)
+        {
+            return;
+        }
+
+        Block bossRoom = FindFarthestRoom(player.transform.position);
+        if (null == bossRoom)
+        {
+            return;
+        }
+
+        Tile spawnTile = FindRoomCenterFloorTile(bossRoom);
+        if (null == spawnTile)
+        {
+            spawnTile = FindRoomFloorTile(bossRoom);
+        }
+
+        if (null == spawnTile)
+        {
+            return;
+        }
+
+        GameObject bossObject = Instantiate(bossPrefab, transform);
+        bossObject.name = "Boss";
+        bossObject.transform.position = new Vector3(
+            spawnTile.rect.x + 0.5f,
+            spawnTile.rect.y + 0.5f,
+            0.0f
+        );
+
+        SpriteRenderer bossRenderer = bossObject.GetComponent<SpriteRenderer>();
+        if (null != bossRenderer)
+        {
+            bossRenderer.sortingOrder = 19;
+        }
+
+        Boss boss = bossObject.GetComponent<Boss>();
+        if (null == boss)
+        {
+            boss = bossObject.AddComponent<Boss>();
+        }
+
+        boss.Init(tileMap);
+    }
+
+    private Tile FindRoomCenterFloorTile(Block room)
+    {
+        int centerX = (int)room.rect.center.x;
+        int centerY = (int)room.rect.center.y;
+
+        int maxRadius = (int)Mathf.Max(room.rect.width, room.rect.height);
+
+        for (int radius = 0; radius <= maxRadius; radius++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                for (int dx = -radius; dx <= radius; dx++)
+                {
+                    if (radius != Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy)))
+                    {
+                        continue;
+                    }
+
+                    Tile tile = tileMap.GetTile(centerX + dx, centerY + dy);
+                    if (null == tile)
+                    {
+                        continue;
+                    }
+
+                    if (Tile.Type.Floor != tile.type)
+                    {
+                        continue;
+                    }
+
+                    if (null != tile.door)
+                    {
+                        continue;
+                    }
+
+                    return tile;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Block FindFarthestRoom(Vector3 fromPosition)
+    {
+        Block farthest = null;
+        float maxDistance = -1.0f;
+
+        foreach (Block room in rooms)
+        {
+            if (Block.Type.Room != room.type)
+            {
+                continue;
+            }
+
+            Vector2 roomCenter = new Vector2(room.rect.center.x, room.rect.center.y);
+            float distance = Vector2.Distance(roomCenter, fromPosition);
+
+            if (distance > maxDistance)
+            {
+                maxDistance = distance;
+                farthest = room;
+            }
+        }
+
+        return farthest;
     }
 
     private Block FindCenterRoom()

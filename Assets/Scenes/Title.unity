@@ -149,10 +149,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleMenu
   gameSceneName: SampleScene
-  characterNames:
-  - "\uAD81\uC218"
-  - "\uB3C4\uC801"
-  - "\uB9C8\uBC95\uC0AC"
+  backgroundSpriteName: Sprites/TitleBackground
+  menuScale: 0.2
+  menuGap: 30
+  hoverScale: 1.08
+  menuGapHorizontal: 60
 --- !u!4 &1755839591
 Transform:
   m_ObjectHideFlags: 0

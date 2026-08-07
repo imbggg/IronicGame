@@ -392,6 +392,7 @@ MonoBehaviour:
   - {fileID: 1527663254196888504, guid: 2ab8bf349d9879949843ba30902b68de, type: 3}
   - {fileID: 5852970483503552392, guid: cdc84d4907f8bb545b18641c39a41f2e, type: 3}
   - {fileID: 7154124390040288725, guid: e2d848d2957be7a46942d26e2c9f9428, type: 3}
+  bossPrefab: {fileID: 6478211776525203248, guid: 80c3f12f8394c8346ae12b2e0dd541b7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
