@@ -11,9 +11,11 @@ public class MinimapUI : MonoBehaviour
     private static MinimapUI instance;
 
     private DungeonGenerator generator;
+    private TitleMenu titleMenu;
     private TileMap cachedTileMap;
     private Texture2D mapTexture;
     private Player player;
+    private Boss boss;
     private Monster[] monsters = new Monster[0];
     private float refreshRemaining;
     private bool visible = true;
@@ -66,6 +68,10 @@ public class MinimapUI : MonoBehaviour
             visible = false == visible;
         }
 
+        // 타이틀 메뉴가 같은 씬에서 OnGUI로 덮여 그려지기 때문에
+        // 던전이 이미 생성돼 있어도 미니맵은 숨겨야 한다.
+        titleMenu = FindAnyObjectByType<TitleMenu>();
+
         if (null == generator)
         {
             generator = FindAnyObjectByType<DungeonGenerator>();
@@ -75,6 +81,7 @@ public class MinimapUI : MonoBehaviour
         {
             cachedTileMap = null;
             player = null;
+            boss = null;
             monsters = new Monster[0];
             return;
         }
@@ -152,11 +159,17 @@ public class MinimapUI : MonoBehaviour
         }
 
         monsters = FindObjectsByType<Monster>();
+        boss = FindAnyObjectByType<Boss>();
     }
 
     private void OnGUI()
     {
         if (false == visible || null == cachedTileMap || null == mapTexture)
+        {
+            return;
+        }
+
+        if (null != titleMenu && true == titleMenu.enabled)
         {
             return;
         }
@@ -199,11 +212,17 @@ public class MinimapUI : MonoBehaviour
         titleStyle.fontStyle = FontStyle.Bold;
         titleStyle.alignment = TextAnchor.MiddleCenter;
         titleStyle.normal.textColor = new Color(0.9f, 0.82f, 0.95f, 1.0f);
-        GUI.Label(new Rect(panelX, panelY + 2.0f, panelSize, 28.0f), "\uC9C0\uB3C4  [M]", titleStyle);
+        GUI.Label(new Rect(panelX, panelY + 2.0f, panelSize, 28.0f), "지도  [M]", titleStyle);
 
         GUI.DrawTexture(mapRect, mapTexture, ScaleMode.StretchToFill, true);
         DrawDoors(mapRect);
         DrawMonsters(mapRect);
+
+        if (null != boss)
+        {
+            DrawMarker(boss.transform.position, mapRect, 11.0f, new Color(1.0f, 0.72f, 0.05f, 1.0f));
+            DrawMarker(boss.transform.position, mapRect, 5.0f, new Color(0.85f, 0.08f, 0.08f, 1.0f));
+        }
 
         if (null != player)
         {

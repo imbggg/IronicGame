@@ -46,6 +46,7 @@ public class DoorView : MonoBehaviour
                     && true == Input.GetKeyDown(KeyCode.E))
                 {
                     door.Open();
+                    RetroAudio.Play(RetroSound.DoorOpen);
                 }
                 else if (Door.State.Open == door.state && distance >= closeDistance)
                 {

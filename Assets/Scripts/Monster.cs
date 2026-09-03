@@ -54,11 +54,22 @@ public class Monster : MonoBehaviour
     private float cooldownRemaining;
     private int health;
     private bool attackDamageApplied;
+    private bool lootChestSpawned;
+    private int guaranteedBossFragmentCount;
 
-    public void Init(TileMap map, Vector2 startPosition, Player target, int typeNumber)
+    public int RoomIndex { get; private set; } = -1;
+    public bool IsDefeated { get { return AnimationState.Death == state; } }
+
+    public void Init(
+        TileMap map,
+        Vector2 startPosition,
+        Player target,
+        int typeNumber,
+        int spawnRoomIndex = -1)
     {
         tileMap = map;
         player = target;
+        RoomIndex = spawnRoomIndex;
         monsterType = Mathf.Clamp(typeNumber, 1, 4);
         config = GetConfig(monsterType);
         config.attackCooldown *= GameData.GetMonsterAttackCooldownMultiplier();
@@ -85,6 +96,12 @@ public class Monster : MonoBehaviour
             UpdateLockedAnimation(false);
             if (stateElapsed >= GetDuration(deathFrames) + 0.15f)
             {
+                if (false == lootChestSpawned)
+                {
+                    lootChestSpawned = true;
+                    LootChest.Spawn(transform.position, guaranteedBossFragmentCount);
+                }
+
                 Destroy(gameObject);
             }
             return;
@@ -165,6 +182,7 @@ public class Monster : MonoBehaviour
         if (0 >= health)
         {
             SetState(AnimationState.Death);
+            RetroAudio.Play(RetroSound.MonsterDefeated);
 
             Collider2D monsterCollider = GetComponent<Collider2D>();
             if (null != monsterCollider)
@@ -174,7 +192,13 @@ public class Monster : MonoBehaviour
             return;
         }
 
+        RetroAudio.Play(RetroSound.MonsterHit);
         SetState(AnimationState.Hit);
+    }
+
+    public void AddGuaranteedBossFragment()
+    {
+        guaranteedBossFragmentCount++;
     }
 
     private void Move(Vector2 direction)

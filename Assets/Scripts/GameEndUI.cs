@@ -3,9 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class GameEndUI : MonoBehaviour
 {
+    private const string DefeatText = "패배";
+    private const string ClearText = "던전 클리어!";
+
     private static GameEndUI instance;
 
-    [SerializeField] private string titleSceneName = "Title";
+    [SerializeField]
+    [Tooltip("타이틀(게임 시작 메뉴) 씬 이름. Build Settings에 등록돼 있어야 한다.")]
+    private string titleSceneName = "Title";
 
     private bool showing;
     private string resultText;
@@ -36,12 +41,12 @@ public class GameEndUI : MonoBehaviour
 
     public static void ShowClear()
     {
-        EnsureInstance().Show("\uB358\uC804 \uD074\uB9AC\uC5B4!");
+        EnsureInstance().Show(ClearText);
     }
 
     public static void ShowGameOver()
     {
-        EnsureInstance().Show("\uAC8C\uC784 \uC624\uBC84");
+        EnsureInstance().Show(DefeatText);
     }
 
     private static GameEndUI EnsureInstance()
@@ -80,49 +85,69 @@ public class GameEndUI : MonoBehaviour
         GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Texture2D.whiteTexture);
         GUI.color = previousColor;
 
-        float panelWidth = 420.0f;
-        float panelHeight = 405.0f;
+        // 해상도가 4K까지 올라가므로 화면 높이에 비례시킨다.
+        float panelWidth = Screen.height * 0.34f;
+        float buttonHeight = Screen.height * 0.075f;
+        float gap = Screen.height * 0.022f;
+        float titleHeight = Screen.height * 0.09f;
+        float recordHeight = Screen.height * 0.05f;
+
+        float panelHeight =
+            titleHeight + recordHeight + gap
+            + buttonHeight * 2.0f + gap;
+
         float x = Screen.width * 0.5f - panelWidth * 0.5f;
         float y = Screen.height * 0.5f - panelHeight * 0.5f;
 
         GUIStyle titleStyle = new GUIStyle(GUI.skin.label);
-        titleStyle.fontSize = 42;
+        titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.055f);
         titleStyle.fontStyle = FontStyle.Bold;
         titleStyle.alignment = TextAnchor.MiddleCenter;
-        titleStyle.normal.textColor = resultText == "\uAC8C\uC784 \uC624\uBC84"
+        titleStyle.normal.textColor = DefeatText == resultText
             ? new Color(1.0f, 0.25f, 0.25f)
             : new Color(1.0f, 0.82f, 0.25f);
 
-        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
-        buttonStyle.fontSize = 22;
-        buttonStyle.fontStyle = FontStyle.Bold;
-
-        GUI.Label(new Rect(x, y, panelWidth, 72.0f), resultText, titleStyle);
-
         GUIStyle recordStyle = new GUIStyle(GUI.skin.label);
-        recordStyle.fontSize = 20;
+        recordStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.026f);
         recordStyle.fontStyle = FontStyle.Bold;
         recordStyle.alignment = TextAnchor.MiddleCenter;
         recordStyle.normal.textColor = Color.white;
+
+        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+        buttonStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.030f);
+        buttonStyle.fontStyle = FontStyle.Bold;
+
+        GUI.Label(new Rect(x, y, panelWidth, titleHeight), resultText, titleStyle);
+
         GUI.Label(
-            new Rect(x, y + 72.0f, panelWidth, 38.0f),
-            $"\uB09C\uC774\uB3C4 {GameData.GetDifficultyName()}  |  \uAE30\uB85D {GameData.FormatElapsedTime()}",
+            new Rect(x, y + titleHeight, panelWidth, recordHeight),
+            $"난이도 {GameData.GetDifficultyName()}  |  기록 {GameData.FormatElapsedTime()}",
             recordStyle
         );
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 125.0f, panelWidth - 140.0f, 58.0f), "\uB2E4\uC2DC \uC2DC\uC791", buttonStyle))
-        {
-            Time.timeScale = 1.0f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        float buttonY = y + titleHeight + recordHeight + gap;
+        float buttonX = x + panelWidth * 0.12f;
+        float buttonWidth = panelWidth * 0.76f;
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 200.0f, panelWidth - 140.0f, 58.0f), "\uC9C1\uC5C5 \uC120\uD0DD", buttonStyle))
+        if (GUI.Button(
+            new Rect(buttonX, buttonY, buttonWidth, buttonHeight),
+            "다시 하기",
+            buttonStyle))
         {
             Time.timeScale = 1.0f;
+            showing = false;
+
+            // 시작 메뉴로 돌아가 직업과 난이도를 다시 고르게 한다.
+            GameData.elapsedTime = 0.0f;
             SceneManager.LoadScene(titleSceneName);
         }
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 275.0f, panelWidth - 140.0f, 58.0f), "\uAC8C\uC784 \uC885\uB8CC", buttonStyle))
+        buttonY += buttonHeight + gap;
+
+        if (GUI.Button(
+            new Rect(buttonX, buttonY, buttonWidth, buttonHeight),
+            "게임 종료",
+            buttonStyle))
         {
             Time.timeScale = 1.0f;
 

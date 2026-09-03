@@ -19,34 +19,30 @@ public class DungeonGenerator : MonoBehaviour
 
     private DungeonRenderer dungeonRenderer;
     [SerializeField] private GameObject[] playerPrefabs;
+    [SerializeField] private GameObject bossPrefab;
 
-    [Header("몬스터")]
+    [Header("몬스터 스폰")]
     [SerializeField, Min(1)] private int minimumMonstersPerRoom = 1;
     [SerializeField, Min(1)] private int maximumMonstersPerRoom = 2;
     [SerializeField, Range(0.0f, 1.0f)] private float monsterRoomSpawnChance = 0.75f;
+    [SerializeField, Min(1)] private int monsterTypeCount = 4;
+
+    [Header("방 전투")]
+    [SerializeField, InspectorName("방 전투 사용")]
+    private bool enableRoomCombat = true;
+
+    [SerializeField, InspectorName("아이러닉 능력 선택 사용")]
+    private bool enableIronicRoomRewards = true;
 
     private Player player;
+    private Boss activeBoss;
+    private Block bossRoom;
+    private RoomCombatSystem roomCombatSystem;
     private readonly List<Monster> monsters = new List<Monster>();
-    private bool monitorMonsterClear;
 
     private void Start()
     {
         Generate();
-    }
-
-    private void Update()
-    {
-        if (false == monitorMonsterClear || true == GameEndUI.IsShowing)
-        {
-            return;
-        }
-
-        monsters.RemoveAll(monster => null == monster);
-        if (0 == monsters.Count)
-        {
-            monitorMonsterClear = false;
-            GameEndUI.ShowClear();
-        }
     }
 
     public void Generate()
@@ -88,7 +84,11 @@ public class DungeonGenerator : MonoBehaviour
         dungeonRenderer.Render(tileMap, rooms);
 
         SpawnPlayer();
+        bossRoom = null != bossPrefab && null != player
+            ? FindFarthestRoom(player.transform.position)
+            : null;
         SpawnMonsters();
+        ConfigureRoomCombat();
     }
 
     private void CreateRooms(WeightRandom<int> roomSizeWeightRandom, WeightRandom<Tuple<float, float>> ratioWeightRandom)
@@ -606,17 +606,51 @@ public class DungeonGenerator : MonoBehaviour
 
     private Tile FindRoomFloorTile(Block room)
     {
+        // 방 중심에서 가까운 타일을 먼저 고른다.
+        // 소품과 문 위에는 절대 세우지 않는다.
+        Tile best = null;
+        float bestDistance = float.MaxValue;
+
+        Vector2 roomCenter = new Vector2(room.rect.center.x, room.rect.center.y);
+
         for (int y = (int)room.rect.yMin + 1; y < (int)room.rect.yMax - 1; y++)
         {
             for (int x = (int)room.rect.xMin + 1; x < (int)room.rect.xMax - 1; x++)
             {
                 Tile tile = tileMap.GetTile(x, y);
-                if (null == tile)
+                if (null == tile || Tile.Type.Floor != tile.type)
                 {
                     continue;
                 }
 
-                if (Tile.Type.Floor == tile.type)
+                if (null != tile.door || true == PropBlock.IsBlocked(tile.index))
+                {
+                    continue;
+                }
+
+                Vector2 position = new Vector2(tile.rect.x + 0.5f, tile.rect.y + 0.5f);
+                float distance = Vector2.SqrMagnitude(position - roomCenter);
+
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    best = tile;
+                }
+            }
+        }
+
+        if (null != best)
+        {
+            return best;
+        }
+
+        // 방 전체가 막혀 있는 예외 상황에서는 소품만이라도 무시하고 바닥을 찾는다.
+        for (int y = (int)room.rect.yMin + 1; y < (int)room.rect.yMax - 1; y++)
+        {
+            for (int x = (int)room.rect.xMin + 1; x < (int)room.rect.xMax - 1; x++)
+            {
+                Tile tile = tileMap.GetTile(x, y);
+                if (null != tile && Tile.Type.Floor == tile.type && null == tile.door)
                 {
                     return tile;
                 }
@@ -684,12 +718,155 @@ public class DungeonGenerator : MonoBehaviour
             player = playerObject.AddComponent<Player>();
         }
 
+        // 방 중심을 그대로 쓰면 그 자리에 소품이 있을 때 플레이어가 낀다.
+        // 위에서 검증한 spawnTile 을 그대로 사용해야 한다.
         Vector2 spawnPosition = new Vector2(
-            centerRoom.rect.center.x,
-            centerRoom.rect.center.y
+            spawnTile.rect.x + 0.5f,
+            spawnTile.rect.y + 0.5f
         );
 
         player.Init(tileMap, spawnPosition);
+    }
+
+    public bool TrySummonBoss()
+    {
+        if (null != activeBoss || null != FindAnyObjectByType<Boss>())
+        {
+            return false;
+        }
+
+        if (null == player || null == bossRoom)
+        {
+            return false;
+        }
+
+        Vector2 playerPosition = player.transform.position;
+        if (false == bossRoom.rect.Contains(playerPosition))
+        {
+            return false;
+        }
+
+        return SpawnBoss();
+    }
+
+    private bool SpawnBoss()
+    {
+        if (null == bossPrefab)
+        {
+            return false;
+        }
+
+        if (null == player)
+        {
+            return false;
+        }
+
+        if (null == bossRoom)
+        {
+            return false;
+        }
+
+        Tile spawnTile = FindRoomCenterFloorTile(bossRoom);
+        if (null == spawnTile)
+        {
+            spawnTile = FindRoomFloorTile(bossRoom);
+        }
+
+        if (null == spawnTile)
+        {
+            return false;
+        }
+
+        GameObject bossObject = Instantiate(bossPrefab, transform);
+        bossObject.name = "Boss";
+        bossObject.transform.position = new Vector3(
+            spawnTile.rect.x + 0.5f,
+            spawnTile.rect.y + 0.5f,
+            0.0f
+        );
+
+        SpriteRenderer bossRenderer = bossObject.GetComponent<SpriteRenderer>();
+        if (null != bossRenderer)
+        {
+            bossRenderer.sortingOrder = 19;
+        }
+
+        Boss boss = bossObject.GetComponent<Boss>();
+        if (null == boss)
+        {
+            boss = bossObject.AddComponent<Boss>();
+        }
+
+        boss.Init(tileMap);
+        activeBoss = boss;
+        return true;
+    }
+
+    private Tile FindRoomCenterFloorTile(Block room)
+    {
+        int centerX = (int)room.rect.center.x;
+        int centerY = (int)room.rect.center.y;
+
+        int maxRadius = (int)Mathf.Max(room.rect.width, room.rect.height);
+
+        for (int radius = 0; radius <= maxRadius; radius++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                for (int dx = -radius; dx <= radius; dx++)
+                {
+                    if (radius != Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy)))
+                    {
+                        continue;
+                    }
+
+                    Tile tile = tileMap.GetTile(centerX + dx, centerY + dy);
+                    if (null == tile)
+                    {
+                        continue;
+                    }
+
+                    if (Tile.Type.Floor != tile.type)
+                    {
+                        continue;
+                    }
+
+                    if (null != tile.door)
+                    {
+                        continue;
+                    }
+
+                    return tile;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Block FindFarthestRoom(Vector3 fromPosition)
+    {
+        Block farthest = null;
+        float maxDistance = -1.0f;
+
+        foreach (Block room in rooms)
+        {
+            if (Block.Type.Room != room.type)
+            {
+                continue;
+            }
+
+            Vector2 roomCenter = new Vector2(room.rect.center.x, room.rect.center.y);
+            float distance = Vector2.Distance(roomCenter, fromPosition);
+
+            if (distance > maxDistance)
+            {
+                maxDistance = distance;
+                farthest = room;
+            }
+        }
+
+        return farthest;
     }
 
     private void SpawnMonsters()
@@ -702,11 +879,22 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         Block playerRoom = FindCenterRoom();
+
         HashSet<int> usedTiles = new HashSet<int>();
 
         foreach (Block room in rooms)
         {
-            if (room == playerRoom || UnityEngine.Random.value > monsterRoomSpawnChance)
+            if (Block.Type.Room != room.type)
+            {
+                continue;
+            }
+
+            if (room == playerRoom || room == bossRoom)
+            {
+                continue;
+            }
+
+            if (UnityEngine.Random.value > monsterRoomSpawnChance)
             {
                 continue;
             }
@@ -725,7 +913,8 @@ public class DungeonGenerator : MonoBehaviour
 
                 usedTiles.Add(spawnTile.index);
 
-                int monsterType = UnityEngine.Random.Range(1, 5);
+                int monsterType = UnityEngine.Random.Range(1, Mathf.Max(2, monsterTypeCount + 1));
+
                 GameObject monsterObject = new GameObject($"Monster{monsterType}_{monsters.Count}");
                 monsterObject.transform.parent = transform;
 
@@ -742,12 +931,77 @@ public class DungeonGenerator : MonoBehaviour
                     spawnTile.rect.y + 0.5f
                 );
 
-                monster.Init(tileMap, spawnPosition, player, monsterType);
+                monster.Init(tileMap, spawnPosition, player, monsterType, room.index);
                 monsters.Add(monster);
             }
         }
 
-        monitorMonsterClear = 0 < monsters.Count;
+        AssignGuaranteedBossFragments();
+    }
+
+    private void ConfigureRoomCombat()
+    {
+        if (null == roomCombatSystem)
+        {
+            roomCombatSystem = GetComponent<RoomCombatSystem>();
+        }
+
+        if (false == enableRoomCombat)
+        {
+            if (null != roomCombatSystem)
+            {
+                roomCombatSystem.enabled = false;
+            }
+            return;
+        }
+
+        if (null == roomCombatSystem)
+        {
+            roomCombatSystem = gameObject.AddComponent<RoomCombatSystem>();
+        }
+
+        Block startRoom = FindCenterRoom();
+        if (null == startRoom || null == player)
+        {
+            roomCombatSystem.enabled = false;
+            return;
+        }
+
+        roomCombatSystem.Init(
+            this,
+            player,
+            startRoom.index,
+            enableIronicRoomRewards
+        );
+    }
+
+    private void AssignGuaranteedBossFragments()
+    {
+        // 몬스터가 생성되지 않는 극단적인 경우에도 진행이 막히지 않게 한다.
+        if (0 == monsters.Count)
+        {
+            LootChest.Spawn(
+                player.transform.position + Vector3.right,
+                PlayerInventory.BossFragmentsRequired
+            );
+            return;
+        }
+
+        // 어느 몬스터가 조각을 갖는지 매번 무작위로 섞되,
+        // 던전 전체에서는 반드시 필요한 3개가 나오도록 숨겨 둔다.
+        List<Monster> candidates = new List<Monster>(monsters);
+        for (int i = candidates.Count - 1; i > 0; i--)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, i + 1);
+            Monster temporary = candidates[i];
+            candidates[i] = candidates[randomIndex];
+            candidates[randomIndex] = temporary;
+        }
+
+        for (int i = 0; i < PlayerInventory.BossFragmentsRequired; i++)
+        {
+            candidates[i % candidates.Count].AddGuaranteedBossFragment();
+        }
     }
 
     private Tile FindMonsterSpawnTile(Block room, HashSet<int> usedTiles)
@@ -773,15 +1027,14 @@ public class DungeonGenerator : MonoBehaviour
                 continue;
             }
 
-            if (
-                null != tile.door
+            if (null != tile.door
                 || PropBlock.IsBlocked(tile.index)
-                || usedTiles.Contains(tile.index)
-            )
+                || usedTiles.Contains(tile.index))
             {
                 continue;
             }
 
+            // 플레이어 코앞에서 튀어나오지 않게 한다.
             Vector2 position = new Vector2(tile.rect.x + 0.5f, tile.rect.y + 0.5f);
             if (3.0f > Vector2.Distance(position, player.transform.position))
             {
@@ -796,8 +1049,6 @@ public class DungeonGenerator : MonoBehaviour
 
     private void ClearMonsters()
     {
-        monitorMonsterClear = false;
-
         foreach (Monster monster in monsters)
         {
             if (null != monster)

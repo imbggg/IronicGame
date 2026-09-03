@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d096091b21039a44fadc4450bc8831b9
+guid: 1f0923aebde99b246bef2267a0f470c8
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -26,15 +26,6 @@ TextureImporter:
   - first:
       213: 3798137279224281753
     second: Special_7
-  - first:
-      213: 4026758805451945358
-    second: Special_8
-  - first:
-      213: -7511474146149648203
-    second: Special_9
-  - first:
-      213: 4579650692572802719
-    second: Special_10
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -67,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -105,7 +96,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -115,6 +106,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -157,7 +161,7 @@ TextureImporter:
         serializedVersion: 2
         x: 141
         y: 39
-        width: 22
+        width: 23
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -179,8 +183,8 @@ TextureImporter:
         serializedVersion: 2
         x: 241
         y: 39
-        width: 22
-        height: 21
+        width: 23
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,7 +206,7 @@ TextureImporter:
         x: 341
         y: 39
         width: 22
-        height: 21
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,10 +225,10 @@ TextureImporter:
       name: Special_4
       rect:
         serializedVersion: 2
-        x: 441
+        x: 439
         y: 39
-        width: 22
-        height: 21
+        width: 33
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,10 +247,10 @@ TextureImporter:
       name: Special_5
       rect:
         serializedVersion: 2
-        x: 538
+        x: 539
         y: 39
-        width: 30
-        height: 21
+        width: 31
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,10 +269,10 @@ TextureImporter:
       name: Special_6
       rect:
         serializedVersion: 2
-        x: 568
-        y: 46
-        width: 14
-        height: 13
+        x: 639
+        y: 39
+        width: 28
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,7 +291,7 @@ TextureImporter:
       name: Special_7
       rect:
         serializedVersion: 2
-        x: 639
+        x: 739
         y: 39
         width: 25
         height: 19
@@ -301,72 +305,6 @@ TextureImporter:
       bones: []
       spriteID: 99af4586bb1b5b430800000000000000
       internalID: 3798137279224281753
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Special_8
-      rect:
-        serializedVersion: 2
-        x: 661
-        y: 45
-        width: 7
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e85b3238ccbe1e730800000000000000
-      internalID: 4026758805451945358
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Special_9
-      rect:
-        serializedVersion: 2
-        x: 667
-        y: 45
-        width: 7
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5b83833cf02e1c790800000000000000
-      internalID: -7511474146149648203
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Special_10
-      rect:
-        serializedVersion: 2
-        x: 739
-        y: 39
-        width: 25
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f9e6c267a003e8f30800000000000000
-      internalID: 4579650692572802719
       vertices: []
       indices: 
       edges: []
@@ -387,15 +325,12 @@ TextureImporter:
     nameFileIdTable:
       Special_0: -9068871714124230211
       Special_1: -5513262646514174557
-      Special_10: 4579650692572802719
       Special_2: -6198531488440642195
       Special_3: 6701770154028129973
       Special_4: 4992887672371064048
       Special_5: -3184613127404677753
       Special_6: 8424837872123440092
       Special_7: 3798137279224281753
-      Special_8: 4026758805451945358
-      Special_9: -7511474146149648203
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
