@@ -223,9 +223,9 @@ internal sealed class IronicMenuStyle
         return clicked;
     }
 
-    public void Heading(Rect rect, string text)
+    public void Heading(Rect rect, string text, int size = 36)
     {
-        DrawStoneText(rect, text, 36, false, 0.88f);
+        DrawStoneText(rect, text, size, false, 0.88f);
     }
 
     public void Caption(Rect rect, string text)

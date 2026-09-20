@@ -12,8 +12,14 @@ public class GameEndUI : MonoBehaviour
     [Tooltip("타이틀(게임 시작 메뉴) 씬 이름. Build Settings에 등록돼 있어야 한다.")]
     private string titleSceneName = "Title";
 
+    [SerializeField]
+    private string backgroundSpriteName = "Sprites/TitleBackground";
+
     private bool showing;
     private string resultText;
+    private Texture2D background;
+    private Texture2D defeatTitle;
+    private readonly IronicMenuStyle menu = new IronicMenuStyle();
 
     public static bool IsShowing
     {
@@ -29,6 +35,8 @@ public class GameEndUI : MonoBehaviour
         }
 
         instance = this;
+        background = LoadTexture(backgroundSpriteName);
+        defeatTitle = LoadTexture("Sprites/defeat");
     }
 
     private void OnDestroy()
@@ -37,6 +45,8 @@ public class GameEndUI : MonoBehaviour
         {
             instance = null;
         }
+
+        menu.Dispose();
     }
 
     public static void ShowClear()
@@ -80,74 +90,77 @@ public class GameEndUI : MonoBehaviour
             return;
         }
 
+        Matrix4x4 previousMatrix = GUI.matrix;
         Color previousColor = GUI.color;
-        GUI.color = new Color(0.02f, 0.01f, 0.04f, 0.88f);
-        GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Texture2D.whiteTexture);
-        GUI.color = previousColor;
+        GUI.color = Color.white;
 
-        // 해상도가 4K까지 올라가므로 화면 높이에 비례시킨다.
-        float panelWidth = Screen.height * 0.34f;
-        float buttonHeight = Screen.height * 0.075f;
-        float gap = Screen.height * 0.022f;
-        float titleHeight = Screen.height * 0.09f;
-        float recordHeight = Screen.height * 0.05f;
+        try
+        {
+            menu.Begin();
+            DrawBackground();
+            DrawResultMenu();
+        }
+        finally
+        {
+            GUI.matrix = previousMatrix;
+            GUI.color = previousColor;
+        }
+    }
 
-        float panelHeight =
-            titleHeight + recordHeight + gap
-            + buttonHeight * 2.0f + gap;
+    private void DrawBackground()
+    {
+        Rect screen = new Rect(0.0f, 0.0f, menu.Width, menu.Height);
+        if (null != background)
+        {
+            GUI.DrawTexture(screen, background, ScaleMode.ScaleAndCrop);
+        }
+        else
+        {
+            IronicMenuStyle.Fill(screen, new Color32(20, 12, 24, 255));
+        }
 
-        float x = Screen.width * 0.5f - panelWidth * 0.5f;
-        float y = Screen.height * 0.5f - panelHeight * 0.5f;
+        // 시작 화면보다 어둡게 덮어 게임 결과에 시선이 모이게 한다.
+        IronicMenuStyle.Fill(screen, new Color(0.025f, 0.008f, 0.035f, 0.58f));
+    }
 
-        GUIStyle titleStyle = new GUIStyle(GUI.skin.label);
-        titleStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.055f);
-        titleStyle.fontStyle = FontStyle.Bold;
-        titleStyle.alignment = TextAnchor.MiddleCenter;
-        titleStyle.normal.textColor = DefeatText == resultText
-            ? new Color(1.0f, 0.25f, 0.25f)
-            : new Color(1.0f, 0.82f, 0.25f);
+    private void DrawResultMenu()
+    {
+        const float panelWidth = 620.0f;
+        const float panelHeight = 500.0f;
+        float x = (menu.Width - panelWidth) * 0.5f;
+        float y = (menu.Height - panelHeight) * 0.5f;
 
-        GUIStyle recordStyle = new GUIStyle(GUI.skin.label);
-        recordStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.026f);
-        recordStyle.fontStyle = FontStyle.Bold;
-        recordStyle.alignment = TextAnchor.MiddleCenter;
-        recordStyle.normal.textColor = Color.white;
+        Rect panel = new Rect(x, y, panelWidth, panelHeight);
+        IronicMenuStyle.Fill(panel, new Color(0.055f, 0.025f, 0.070f, 0.76f));
 
-        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
-        buttonStyle.fontSize = Mathf.RoundToInt(Screen.height * 0.030f);
-        buttonStyle.fontStyle = FontStyle.Bold;
+        Texture2D resultTitle = DefeatText == resultText ? defeatTitle : null;
+        Rect titleArea = new Rect(x + 90.0f, y + 48.0f, panelWidth - 180.0f, 118.0f);
 
-        GUI.Label(new Rect(x, y, panelWidth, titleHeight), resultText, titleStyle);
+        if (null != resultTitle)
+        {
+            GUI.DrawTexture(FitTexture(titleArea, resultTitle), resultTitle, ScaleMode.StretchToFill, true);
+        }
+        else
+        {
+            menu.Heading(titleArea, resultText, 58);
+        }
 
-        GUI.Label(
-            new Rect(x, y + titleHeight, panelWidth, recordHeight),
-            $"난이도 {GameData.GetDifficultyName()}  |  기록 {GameData.FormatElapsedTime()}",
-            recordStyle
-        );
+        menu.Caption(
+            new Rect(x + 60.0f, y + 178.0f, panelWidth - 120.0f, 42.0f),
+            $"난이도 {GameData.GetDifficultyName()}  ·  기록 {GameData.FormatElapsedTime()}");
 
-        float buttonY = y + titleHeight + recordHeight + gap;
-        float buttonX = x + panelWidth * 0.12f;
-        float buttonWidth = panelWidth * 0.76f;
+        Rect retryRect = new Rect(x + 80.0f, y + 258.0f, panelWidth - 160.0f, 72.0f);
+        Rect quitRect = new Rect(x + 80.0f, y + 350.0f, panelWidth - 160.0f, 72.0f);
 
-        if (GUI.Button(
-            new Rect(buttonX, buttonY, buttonWidth, buttonHeight),
-            "다시 하기",
-            buttonStyle))
+        if (menu.Button(retryRect, "다시 하기"))
         {
             Time.timeScale = 1.0f;
             showing = false;
-
-            // 시작 메뉴로 돌아가 직업과 난이도를 다시 고르게 한다.
             GameData.elapsedTime = 0.0f;
             SceneManager.LoadScene(titleSceneName);
         }
 
-        buttonY += buttonHeight + gap;
-
-        if (GUI.Button(
-            new Rect(buttonX, buttonY, buttonWidth, buttonHeight),
-            "게임 종료",
-            buttonStyle))
+        if (menu.Button(quitRect, "게임 종료", true))
         {
             Time.timeScale = 1.0f;
 
@@ -157,5 +170,26 @@ public class GameEndUI : MonoBehaviour
             Application.Quit();
 #endif
         }
+    }
+
+    private static Texture2D LoadTexture(string resourcePath)
+    {
+        Sprite sprite = Resources.Load<Sprite>(resourcePath);
+        return null != sprite ? sprite.texture : Resources.Load<Texture2D>(resourcePath);
+    }
+
+    private static Rect FitTexture(Rect area, Texture2D texture)
+    {
+        float textureRatio = (float)texture.width / texture.height;
+        float areaRatio = area.width / area.height;
+
+        if (textureRatio > areaRatio)
+        {
+            float height = area.width / textureRatio;
+            return new Rect(area.x, area.center.y - height * 0.5f, area.width, height);
+        }
+
+        float width = area.height * textureRatio;
+        return new Rect(area.center.x - width * 0.5f, area.y, width, area.height);
     }
 }
