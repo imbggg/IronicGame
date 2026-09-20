@@ -1,0 +1,1846 @@
+fileFormatVersion: 2
+guid: a7fe35e48f66aa9488a1ec381e9f3903
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7142329186778448189
+    second: Altar_Idle_0
+  - first:
+      213: 2465417178230210389
+    second: Altar_Idle_1
+  - first:
+      213: 7392600149722105571
+    second: Altar_Idle_2
+  - first:
+      213: 1876136492248690440
+    second: Altar_Idle_3
+  - first:
+      213: 4642875956702541999
+    second: Altar_Idle_4
+  - first:
+      213: 850286185717875213
+    second: Altar_Idle_5
+  - first:
+      213: -6865382073061709739
+    second: Altar_Idle_6
+  - first:
+      213: 2836522944786051077
+    second: Altar_Idle_7
+  - first:
+      213: -8652328990753176573
+    second: Altar_Idle_8
+  - first:
+      213: 921398695784986771
+    second: Altar_Idle_9
+  - first:
+      213: 8246789472089539022
+    second: Altar_Idle_10
+  - first:
+      213: -1127306795393666200
+    second: Altar_Idle_11
+  - first:
+      213: -6220606769984170317
+    second: Altar_Idle_12
+  - first:
+      213: 7678463865788732452
+    second: Altar_Idle_13
+  - first:
+      213: 5626440679174585231
+    second: Altar_Idle_14
+  - first:
+      213: -3508111015081766247
+    second: Altar_Idle_15
+  - first:
+      213: 236937206881515793
+    second: Altar_Idle_16
+  - first:
+      213: 8424624824116486651
+    second: Altar_Idle_17
+  - first:
+      213: 2055321522438073653
+    second: Altar_Idle_18
+  - first:
+      213: -3972414541065672665
+    second: Altar_Idle_19
+  - first:
+      213: -4745885974207931974
+    second: Altar_Idle_20
+  - first:
+      213: 477505080801027008
+    second: Altar_Idle_21
+  - first:
+      213: 5864982351531849790
+    second: Altar_Idle_22
+  - first:
+      213: 1965430844355843312
+    second: Altar_Idle_23
+  - first:
+      213: 1520764353384448647
+    second: Altar_Idle_24
+  - first:
+      213: 412503416636622885
+    second: Altar_Idle_25
+  - first:
+      213: 1707849031475719368
+    second: Altar_Idle_26
+  - first:
+      213: -6522640002511893986
+    second: Altar_Idle_27
+  - first:
+      213: 522245468397751849
+    second: Altar_Idle_28
+  - first:
+      213: -2399955899514648056
+    second: Altar_Idle_29
+  - first:
+      213: -421450212660161030
+    second: Altar_Idle_30
+  - first:
+      213: -5728858368870491428
+    second: Altar_Idle_31
+  - first:
+      213: -7547226722636592634
+    second: Altar_Idle_32
+  - first:
+      213: -6295208303492419614
+    second: Altar_Idle_33
+  - first:
+      213: -8965057573830098450
+    second: Altar_Idle_34
+  - first:
+      213: 5901812605132620905
+    second: Altar_Idle_35
+  - first:
+      213: 3336873594063537916
+    second: Altar_Idle_36
+  - first:
+      213: -11114014910970105
+    second: Altar_Idle_37
+  - first:
+      213: 6635248035129414391
+    second: Altar_Idle_38
+  - first:
+      213: -4310733984961850631
+    second: Altar_Idle_39
+  - first:
+      213: 1053929435112002385
+    second: Altar_Idle_40
+  - first:
+      213: 2873940374231384730
+    second: Altar_Idle_41
+  - first:
+      213: -957896933614066264
+    second: Altar_Idle_42
+  - first:
+      213: 2612464919576033277
+    second: Altar_Idle_43
+  - first:
+      213: -3511822825234149020
+    second: Altar_Idle_44
+  - first:
+      213: 3721297286763626923
+    second: Altar_Idle_45
+  - first:
+      213: 8986955395674696039
+    second: Altar_Idle_46
+  - first:
+      213: -176967439392287756
+    second: Altar_Idle_47
+  - first:
+      213: -8033770662788119386
+    second: Altar_Idle_48
+  - first:
+      213: 519752259084362709
+    second: Altar_Idle_49
+  - first:
+      213: -5266642239323055024
+    second: Altar_Idle_50
+  - first:
+      213: 6681721973004844482
+    second: Altar_Idle_51
+  - first:
+      213: -3691659591778347736
+    second: Altar_Idle_52
+  - first:
+      213: 3319576163193970248
+    second: Altar_Idle_53
+  - first:
+      213: 5764370106630760891
+    second: Altar_Idle_54
+  - first:
+      213: -5408439583967722525
+    second: Altar_Idle_55
+  - first:
+      213: -8875705467292524179
+    second: Altar_Idle_56
+  - first:
+      213: -8156329258982604551
+    second: Altar_Idle_57
+  - first:
+      213: 8956069119450146919
+    second: Altar_Idle_58
+  - first:
+      213: 5337135095335345201
+    second: Altar_Idle_59
+  - first:
+      213: 1244962061210242746
+    second: Altar_Idle_60
+  - first:
+      213: -1727339175156314288
+    second: Altar_Idle_61
+  - first:
+      213: 8351282346707893583
+    second: Altar_Idle_62
+  - first:
+      213: -890009974505857550
+    second: Altar_Idle_63
+  - first:
+      213: -4649142110928459078
+    second: Altar_Idle_64
+  - first:
+      213: 2447571482341450187
+    second: Altar_Idle_65
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Altar_Idle_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 168
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ce7a21427951ec90800000000000000
+      internalID: -7142329186778448189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 173
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55fbe8b7cdbe63220800000000000000
+      internalID: 2465417178230210389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 191
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e68fa22baac79660800000000000000
+      internalID: 7392600149722105571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_3
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 196
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80f61a21330690a10800000000000000
+      internalID: 1876136492248690440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_4
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 193
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa8f477651fce6040800000000000000
+      internalID: 4642875956702541999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_5
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 190
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d02c229e7c2dccb00800000000000000
+      internalID: 850286185717875213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_6
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 176
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55862dff06349b0a0800000000000000
+      internalID: -6865382073061709739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_7
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 168
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 500b739f69a5d5720800000000000000
+      internalID: 2836522944786051077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_8
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 168
+        width: 28
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 304c75aff90cce780800000000000000
+      internalID: -8652328990753176573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_9
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 174
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 398b5c66b3779cc00800000000000000
+      internalID: 921398695784986771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_10
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 190
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec1045dd45b727270800000000000000
+      internalID: 8246789472089539022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_11
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 197
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8633dab31700b50f0800000000000000
+      internalID: -1127306795393666200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_12
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 194
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b614b3d917fba9a0800000000000000
+      internalID: -6220606769984170317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_13
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 190
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 424920524326f8a60800000000000000
+      internalID: 7678463865788732452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_14
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 176
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8b3200dcf1251e40800000000000000
+      internalID: 5626440679174585231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_15
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 168
+        width: 28
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9929a695e9fa05fc0800000000000000
+      internalID: -3508111015081766247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_16
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 168
+        width: 28
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 119fe326225c94300800000000000000
+      internalID: 236937206881515793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_17
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 174
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf1a66754a74ae470800000000000000
+      internalID: 8424624824116486651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_18
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 190
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53de22cf808f58c10800000000000000
+      internalID: 2055321522438073653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_19
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 198
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7282f2b85062fd8c0800000000000000
+      internalID: -3972414541065672665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_20
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 195
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9d3dae9d9332eb0800000000000000
+      internalID: -4745885974207931974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_21
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 191
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c3e69f475070a600800000000000000
+      internalID: 477505080801027008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_22
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 168
+        width: 28
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e38bdfcef5a946150800000000000000
+      internalID: 5864982351531849790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_23
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 168
+        width: 28
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f41d6c80fc964b10800000000000000
+      internalID: 1965430844355843312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_24
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 173
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7828e8e3f17da1510800000000000000
+      internalID: 1520764353384448647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_25
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 191
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 528c2410ca189b500800000000000000
+      internalID: 412503416636622885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_26
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 198
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ccea1345af73b710800000000000000
+      internalID: 1707849031475719368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_27
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 195
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1a8684e97dea75a0800000000000000
+      internalID: -6522640002511893986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_28
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 192
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92ec76d8c736f3700800000000000000
+      internalID: 522245468397751849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_29
+      rect:
+        serializedVersion: 2
+        x: 757
+        y: 168
+        width: 28
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80a83dc23d4a1bed0800000000000000
+      internalID: -2399955899514648056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_30
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 168
+        width: 28
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af5d0e7b345b62af0800000000000000
+      internalID: -421450212660161030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_31
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 172
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cda53f29aa10f70b0800000000000000
+      internalID: -5728858368870491428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_32
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 192
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60a09ed584dd24790800000000000000
+      internalID: -7547226722636592634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_33
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 197
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2efae33c66de2a8a0800000000000000
+      internalID: -6295208303492419614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_34
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 194
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee18ee0b2a7b59380800000000000000
+      internalID: -8965057573830098450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_35
+      rect:
+        serializedVersion: 2
+        x: 914
+        y: 192
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9644ad39b4377e150800000000000000
+      internalID: 5901812605132620905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_36
+      rect:
+        serializedVersion: 2
+        x: 957
+        y: 168
+        width: 28
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf6c982bad4fe4e20800000000000000
+      internalID: 3336873594063537916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_37
+      rect:
+        serializedVersion: 2
+        x: 1017
+        y: 168
+        width: 28
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7070431ccd388dff0800000000000000
+      internalID: -11114014910970105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_38
+      rect:
+        serializedVersion: 2
+        x: 1060
+        y: 172
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f25f72dee2251c50800000000000000
+      internalID: 6635248035129414391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_39
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 192
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f21529a7423d24c0800000000000000
+      internalID: -4310733984961850631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_40
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 196
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 153dd2ebc3f40ae00800000000000000
+      internalID: 1053929435112002385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_41
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 193
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9207b72b8942e720800000000000000
+      internalID: 2873940374231384730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_42
+      rect:
+        serializedVersion: 2
+        x: 1114
+        y: 191
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a56f7460ddd4b2f0800000000000000
+      internalID: -957896933614066264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_43
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 168
+        width: 28
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7bf7fb007514420800000000000000
+      internalID: 2612464919576033277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_44
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4615fc33fbf734fc0800000000000000
+      internalID: -3511822825234149020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_45
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 178
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba1cb218a24b4a330800000000000000
+      internalID: 3721297286763626923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_46
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 177
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7696873415418bc70800000000000000
+      internalID: 8986955395674696039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_47
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f3563e2d094b8df0800000000000000
+      internalID: -176967439392287756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_48
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 178
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a44f8d9520528090800000000000000
+      internalID: -8033770662788119386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_49
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 176
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d32ee50de7863700800000000000000
+      internalID: 519752259084362709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_50
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05cd41689c029e6b0800000000000000
+      internalID: -5266642239323055024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_51
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 177
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cd30e0bbbe3abc50800000000000000
+      internalID: 6681721973004844482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_52
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 175
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8255368192794ccc0800000000000000
+      internalID: -3691659591778347736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_53
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 175
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84ed70cbee0811e20800000000000000
+      internalID: 3319576163193970248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_54
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb96b9f22182fff40800000000000000
+      internalID: 5764370106630760891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_55
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 176
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e341708adc51f4b0800000000000000
+      internalID: -5408439583967722525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_56
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 174
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d61690b27e823d480800000000000000
+      internalID: -8875705467292524179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_57
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 175
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f08737c0c5eece80800000000000000
+      internalID: -8156329258982604551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_58
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768eba0b9695a4c70800000000000000
+      internalID: 8956069119450146919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_59
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 176
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13cdbb38710511a40800000000000000
+      internalID: 5337135095335345201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_60
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 174
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abe4649066ef64110800000000000000
+      internalID: 1244962061210242746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_61
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 176
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05f013a0c224708e0800000000000000
+      internalID: -1727339175156314288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_62
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4db38e1c07b5e370800000000000000
+      internalID: 8351282346707893583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_63
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 177
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fd1607c4ac06a3f0800000000000000
+      internalID: -890009974505857550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_64
+      rect:
+        serializedVersion: 2
+        x: 1124
+        y: 175
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abaaccfd1edea7fb0800000000000000
+      internalID: -4649142110928459078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Idle_65
+      rect:
+        serializedVersion: 2
+        x: 1135
+        y: 177
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc1a65f9b4587f120800000000000000
+      internalID: 2447571482341450187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Altar_Idle_0: -7142329186778448189
+      Altar_Idle_1: 2465417178230210389
+      Altar_Idle_10: 8246789472089539022
+      Altar_Idle_11: -1127306795393666200
+      Altar_Idle_12: -6220606769984170317
+      Altar_Idle_13: 7678463865788732452
+      Altar_Idle_14: 5626440679174585231
+      Altar_Idle_15: -3508111015081766247
+      Altar_Idle_16: 236937206881515793
+      Altar_Idle_17: 8424624824116486651
+      Altar_Idle_18: 2055321522438073653
+      Altar_Idle_19: -3972414541065672665
+      Altar_Idle_2: 7392600149722105571
+      Altar_Idle_20: -4745885974207931974
+      Altar_Idle_21: 477505080801027008
+      Altar_Idle_22: 5864982351531849790
+      Altar_Idle_23: 1965430844355843312
+      Altar_Idle_24: 1520764353384448647
+      Altar_Idle_25: 412503416636622885
+      Altar_Idle_26: 1707849031475719368
+      Altar_Idle_27: -6522640002511893986
+      Altar_Idle_28: 522245468397751849
+      Altar_Idle_29: -2399955899514648056
+      Altar_Idle_3: 1876136492248690440
+      Altar_Idle_30: -421450212660161030
+      Altar_Idle_31: -5728858368870491428
+      Altar_Idle_32: -7547226722636592634
+      Altar_Idle_33: -6295208303492419614
+      Altar_Idle_34: -8965057573830098450
+      Altar_Idle_35: 5901812605132620905
+      Altar_Idle_36: 3336873594063537916
+      Altar_Idle_37: -11114014910970105
+      Altar_Idle_38: 6635248035129414391
+      Altar_Idle_39: -4310733984961850631
+      Altar_Idle_4: 4642875956702541999
+      Altar_Idle_40: 1053929435112002385
+      Altar_Idle_41: 2873940374231384730
+      Altar_Idle_42: -957896933614066264
+      Altar_Idle_43: 2612464919576033277
+      Altar_Idle_44: -3511822825234149020
+      Altar_Idle_45: 3721297286763626923
+      Altar_Idle_46: 8986955395674696039
+      Altar_Idle_47: -176967439392287756
+      Altar_Idle_48: -8033770662788119386
+      Altar_Idle_49: 519752259084362709
+      Altar_Idle_5: 850286185717875213
+      Altar_Idle_50: -5266642239323055024
+      Altar_Idle_51: 6681721973004844482
+      Altar_Idle_52: -3691659591778347736
+      Altar_Idle_53: 3319576163193970248
+      Altar_Idle_54: 5764370106630760891
+      Altar_Idle_55: -5408439583967722525
+      Altar_Idle_56: -8875705467292524179
+      Altar_Idle_57: -8156329258982604551
+      Altar_Idle_58: 8956069119450146919
+      Altar_Idle_59: 5337135095335345201
+      Altar_Idle_6: -6865382073061709739
+      Altar_Idle_60: 1244962061210242746
+      Altar_Idle_61: -1727339175156314288
+      Altar_Idle_62: 8351282346707893583
+      Altar_Idle_63: -890009974505857550
+      Altar_Idle_64: -4649142110928459078
+      Altar_Idle_65: 2447571482341450187
+      Altar_Idle_7: 2836522944786051077
+      Altar_Idle_8: -8652328990753176573
+      Altar_Idle_9: 921398695784986771
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

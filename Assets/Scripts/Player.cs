@@ -115,6 +115,9 @@ public class Player : MonoBehaviour
 
     public int MaxHealth { get { return maxHealth; } }
     public int CurrentHealth { get { return currentHealth; } }
+    public float AttackPowerMultiplier { get { return attackPowerMultiplier; } }
+    public float SkillCooldownDuration { get { return skillCooldown; } }
+    public float SkillCooldownRemaining { get { return Mathf.Max(0.0f, skillCooldownRemaining); } }
     public bool IsDead { get { return 0 >= currentHealth; } }
     public PlayerInventory Inventory { get; private set; }
     public string LastIronicModifierDescription { get; private set; } = string.Empty;
@@ -412,7 +415,7 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 바라보는 방향 앞쪽에 원을 만들어 그 안의 몬스터를 전부 때린다.
+    /// 바라보는 방향 앞쪽에 원을 만들어 그 안의 대상을 전부 때린다. 몬스터와 보스 모두 포함된다.
     /// 몬스터 콜라이더는 트리거라서 OverlapCircle로 잡힌다.
     /// </summary>
     private void MeleeHit(int damage, float hitRadius)
@@ -429,13 +432,13 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < hits.Length; ++i)
         {
-            Monster monster = hits[i].GetComponent<Monster>();
-            if (null == monster)
+            IDamageable target = hits[i].GetComponent<IDamageable>();
+            if (null == target)
             {
                 continue;
             }
 
-            monster.TakeDamage(GetModifiedDamage(damage));
+            target.TakeDamage(GetModifiedDamage(damage));
         }
     }
 

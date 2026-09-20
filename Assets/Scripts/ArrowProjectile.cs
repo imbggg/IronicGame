@@ -20,10 +20,10 @@ public class ArrowProjectile : MonoBehaviour
     private Vector2 startPosition;
     private int runtimeDamage;
 
-    // 관통형은 같은 몬스터를 프레임마다 다시 때릴 수 있어서
-    // 이미 때린 대상을 기억해 둔다.
-    private readonly System.Collections.Generic.HashSet<Monster> hitMonsters =
-        new System.Collections.Generic.HashSet<Monster>();
+    // 관통형은 같은 대상을 프레임마다 다시 때릴 수 있어서
+    // 이미 때린 대상을 기억해 둔다. 몬스터와 보스를 함께 담는다.
+    private readonly System.Collections.Generic.HashSet<IDamageable> hitTargets =
+        new System.Collections.Generic.HashSet<IDamageable>();
 
     public void Initialize(Vector2 fireDirection, float damageMultiplier = 1.0f)
     {
@@ -69,19 +69,19 @@ public class ArrowProjectile : MonoBehaviour
 
     private void HandleHit(Collider2D other)
     {
-        Monster monster = other.GetComponent<Monster>();
-        if (null == monster)
+        IDamageable target = other.GetComponent<IDamageable>();
+        if (null == target)
         {
             return;
         }
 
-        if (true == hitMonsters.Contains(monster))
+        if (true == hitTargets.Contains(target))
         {
             return;
         }
 
-        hitMonsters.Add(monster);
-        monster.TakeDamage(runtimeDamage);
+        hitTargets.Add(target);
+        target.TakeDamage(runtimeDamage);
 
         if (false == piercing)
         {

@@ -28,8 +28,10 @@ public class GroundSpikeEffect : MonoBehaviour
 
     private float elapsed;
 
-    private readonly System.Collections.Generic.HashSet<Monster> hitMonsters =
-        new System.Collections.Generic.HashSet<Monster>();
+    // 관통형이라 같은 대상을 프레임마다 다시 때릴 수 있어서 기억해 둔다.
+    // 몬스터와 보스를 함께 담는다.
+    private readonly System.Collections.Generic.HashSet<IDamageable> hitTargets =
+        new System.Collections.Generic.HashSet<IDamageable>();
 
     public void Init(
         Vector2 fireDirection,
@@ -106,7 +108,7 @@ public class GroundSpikeEffect : MonoBehaviour
         }
 
         ApplyFrame();
-        DamageMonsters();
+        DamageTargets();
 
         bool animationDone = elapsed >= GetDuration();
         bool outOfRange =
@@ -130,7 +132,7 @@ public class GroundSpikeEffect : MonoBehaviour
         spriteRenderer.sprite = cachedFrames[index];
     }
 
-    private void DamageMonsters()
+    private void DamageTargets()
     {
         // 돌기둥이 다 솟기 전에는 때리지 않는다.
         if (elapsed < GetDuration() * 0.25f)
@@ -142,14 +144,14 @@ public class GroundSpikeEffect : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            Monster monster = hits[i].GetComponent<Monster>();
-            if (null == monster || true == hitMonsters.Contains(monster))
+            IDamageable target = hits[i].GetComponent<IDamageable>();
+            if (null == target || true == hitTargets.Contains(target))
             {
                 continue;
             }
 
-            hitMonsters.Add(monster);
-            monster.TakeDamage(damage);
+            hitTargets.Add(target);
+            target.TakeDamage(damage);
         }
     }
 

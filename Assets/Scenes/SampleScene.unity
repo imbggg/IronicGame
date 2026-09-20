@@ -393,10 +393,13 @@ MonoBehaviour:
   - {fileID: 4490396279703843718, guid: 444acfe604fc1da4caa98d0992912262, type: 3}
   - {fileID: 2388971376114069186, guid: 21af8d4a2d1d5fe43bced8e644e169ac, type: 3}
   bossPrefab: {fileID: 6478211776525203248, guid: 80c3f12f8394c8346ae12b2e0dd541b7, type: 3}
-  minimumMonstersPerRoom: 1
-  maximumMonstersPerRoom: 2
+  minimumMonstersPerRoom: 5
+  maximumMonstersPerRoom: 8
   monsterRoomSpawnChance: 0.75
-  monsterTypeCount: 4
+  monsterTypeCount: 5
+  enableRoomCombat: 1
+  enableIronicRoomRewards: 1
+  altarPixelsPerUnit: 108
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -156,6 +156,22 @@ public class RoomCombatSystem : MonoBehaviour
         return count;
     }
 
+    /// <summary>
+    /// 특정 방의 문을 밖에서 잠근다. 보스방처럼 몬스터 수와 무관하게
+    /// 가둬야 하는 경우에 쓴다. 여기서 잠근 문은 이 시스템이 자동으로 열지 않는다.
+    /// </summary>
+    public void LockRoomFromOutside(int roomIndex)
+    {
+        LockRoomDoors(roomIndex);
+    }
+
+    /// <summary>보스를 잡은 뒤 등 밖에서 다시 열어야 할 때 쓴다.</summary>
+    public void UnlockRoomFromOutside(int roomIndex)
+    {
+        clearedRoomIndices.Add(roomIndex);
+        UnlockRoomDoors(roomIndex, true);
+    }
+
     private void LockRoomDoors(int roomIndex)
     {
         Block room = FindRoom(roomIndex);

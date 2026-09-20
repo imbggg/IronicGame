@@ -11,7 +11,17 @@ public enum RetroSound
     BossSummon,
     DoorOpen,
     RouletteGood,
-    RouletteBad
+    RouletteBad,
+
+    // 보스 전용. 일반 몬스터 소리와 섞이면 보스라는 느낌이 안 난다.
+    BossGroundCast,
+    BossLightningCast,
+    BossLightningStrike,
+    BossOrbCast,
+    BossOrbExplode,
+    BossHit,
+    BossDeath,
+    BossPhaseTwo
 }
 
 public class RetroAudio : MonoBehaviour
@@ -119,6 +129,15 @@ public class RetroAudio : MonoBehaviour
         clips[(int)RetroSound.DoorOpen] = CreateTone("DoorOpen", 120.0f, 210.0f, 0.16f, true);
         clips[(int)RetroSound.RouletteGood] = CreateTone("RouletteGood", 440.0f, 1040.0f, 0.42f, false);
         clips[(int)RetroSound.RouletteBad] = CreateTone("RouletteBad", 260.0f, 70.0f, 0.48f, true);
+
+        clips[(int)RetroSound.BossGroundCast] = CreateTone("BossGroundCast", 95.0f, 38.0f, 0.45f, true);
+        clips[(int)RetroSound.BossLightningCast] = CreateTone("BossLightningCast", 300.0f, 900.0f, 0.30f, false);
+        clips[(int)RetroSound.BossLightningStrike] = CreateTone("BossLightningStrike", 1250.0f, 120.0f, 0.22f, true);
+        clips[(int)RetroSound.BossOrbCast] = CreateTone("BossOrbCast", 540.0f, 190.0f, 0.26f, true);
+        clips[(int)RetroSound.BossOrbExplode] = CreateTone("BossOrbExplode", 170.0f, 45.0f, 0.30f, true);
+        clips[(int)RetroSound.BossHit] = CreateTone("BossHit", 200.0f, 130.0f, 0.10f, true);
+        clips[(int)RetroSound.BossDeath] = CreateTone("BossDeath", 210.0f, 38.0f, 1.10f, true);
+        clips[(int)RetroSound.BossPhaseTwo] = CreateTone("BossPhaseTwo", 150.0f, 640.0f, 0.90f, true);
     }
 
     private AudioClip CreateTone(

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour, IDamageable
 {
     private enum AnimationState
     {
@@ -29,9 +29,17 @@ public class Monster : MonoBehaviour
         public float attackRange;
         public float attackCooldown;
         public float animationFps;
-    }
 
-    private const float PixelsPerUnit = 32.0f;
+        // 몬스터마다 셀 크기가 달라서 화면상 크기를 맞추려면 따로 잡아야 한다.
+        public float pixelsPerUnit;
+
+        // 원거리 몬스터용
+        public bool isRanged;
+        public int projectileCount;     // 탄 스프라이트 프레임 수
+        public int launchFrame;         // 공격 애니메이션 중 탄이 나가는 프레임
+        public float projectileSpeed;
+        public float keepDistance;      // 이보다 가까우면 물러선다
+    }
 
     [SerializeField] private float radius = 0.28f;
     [SerializeField, Range(0.0f, 1.0f)] private float specialAttackChance = 0.3f;
@@ -56,6 +64,8 @@ public class Monster : MonoBehaviour
     private bool attackDamageApplied;
     private bool lootChestSpawned;
     private int guaranteedBossFragmentCount;
+    private Sprite[] projectileFrames;
+    private bool projectileLaunched;
 
     public int RoomIndex { get; private set; } = -1;
     public bool IsDefeated { get { return AnimationState.Death == state; } }
@@ -70,7 +80,7 @@ public class Monster : MonoBehaviour
         tileMap = map;
         player = target;
         RoomIndex = spawnRoomIndex;
-        monsterType = Mathf.Clamp(typeNumber, 1, 4);
+        monsterType = Mathf.Clamp(typeNumber, 1, 5);
         config = GetConfig(monsterType);
         config.attackCooldown *= GameData.GetMonsterAttackCooldownMultiplier();
         health = config.health;
@@ -118,7 +128,15 @@ public class Monster : MonoBehaviour
 
         if (AnimationState.Attack == state || AnimationState.Special == state)
         {
-            TryDamagePlayer();
+            if (true == config.isRanged)
+            {
+                TryLaunchProjectile();
+            }
+            else
+            {
+                TryDamagePlayer();
+            }
+
             if (UpdateLockedAnimation(false))
             {
                 SetState(AnimationState.Idle);
@@ -142,6 +160,12 @@ public class Monster : MonoBehaviour
 
         Vector2 direction = (Vector2)player.transform.position - (Vector2)transform.position;
         float distance = direction.magnitude;
+
+        if (true == config.isRanged)
+        {
+            UpdateRanged(direction, distance);
+            return;
+        }
 
         if (distance <= config.attackRange && 0.0f >= cooldownRemaining)
         {
@@ -194,6 +218,89 @@ public class Monster : MonoBehaviour
 
         RetroAudio.Play(RetroSound.MonsterHit);
         SetState(AnimationState.Hit);
+    }
+
+    /// <summary>
+    /// 원거리 몬스터는 사거리 안에서 탄을 쏘고, 너무 붙으면 물러선다.
+    /// </summary>
+    private void UpdateRanged(Vector2 toPlayer, float distance)
+    {
+        if (distance > config.detectionRange)
+        {
+            SetState(AnimationState.Idle);
+            UpdateLoopAnimation();
+            return;
+        }
+
+        if (0.001f < Mathf.Abs(toPlayer.x))
+        {
+            spriteRenderer.flipX = toPlayer.x < 0.0f;
+        }
+
+        if (distance <= config.attackRange && 0.0f >= cooldownRemaining)
+        {
+            cooldownRemaining = config.attackCooldown;
+            SetState(AnimationState.Attack);
+            ApplyFrame(false);
+            return;
+        }
+
+        Vector2 move = Vector2.zero;
+
+        if (distance > config.attackRange)
+        {
+            move = toPlayer.normalized;
+        }
+        else if (distance < config.keepDistance)
+        {
+            // 너무 붙었으면 거리를 벌린다.
+            move = -toPlayer.normalized;
+        }
+
+        if (Vector2.zero != move)
+        {
+            Move(move);
+            SetState(AnimationState.Walk);
+        }
+        else
+        {
+            SetState(AnimationState.Idle);
+        }
+
+        UpdateLoopAnimation();
+    }
+
+    /// <summary>공격 애니메이션이 발사 프레임에 닿으면 탄을 하나 만든다.</summary>
+    private void TryLaunchProjectile()
+    {
+        if (true == projectileLaunched || null == player)
+        {
+            return;
+        }
+
+        int frame = Mathf.FloorToInt(stateElapsed * config.animationFps);
+        if (frame < config.launchFrame)
+        {
+            return;
+        }
+
+        projectileLaunched = true;
+
+        Vector2 direction = (Vector2)player.transform.position - (Vector2)transform.position;
+        if (0.001f > direction.magnitude)
+        {
+            direction = Vector2.right;
+        }
+
+        MonsterProjectile.Spawn(
+            tileMap,
+            transform.position,
+            direction.normalized,
+            GameData.GetMonsterAttackDamage(config.attackDamage),
+            config.projectileSpeed,
+            player,
+            projectileFrames,
+            config.animationFps);
     }
 
     public void AddGuaranteedBossFragment()
@@ -289,10 +396,17 @@ public class Monster : MonoBehaviour
         specialFrames = LoadFrames(root + "Special", config.specialCount);
         hitFrames = LoadFrames(root + "Hit", config.hitCount);
         deathFrames = LoadFrames(root + "Death", config.deathCount);
+        projectileFrames = LoadFrames(root + "Projectile", config.projectileCount);
     }
 
     private Sprite[] LoadFrames(string resourcePath, int expectedCount)
     {
+        // 해당 클립이 없는 몬스터도 있다. 그때는 에러를 내지 않는다.
+        if (0 >= expectedCount)
+        {
+            return new Sprite[0];
+        }
+
         Texture2D texture = Resources.Load<Texture2D>(resourcePath);
         if (null == texture)
         {
@@ -312,7 +426,7 @@ public class Monster : MonoBehaviour
                 texture,
                 new Rect(i * config.frameSize, 0, config.frameSize, config.frameSize),
                 new Vector2(0.5f, 0.5f),
-                PixelsPerUnit
+                config.pixelsPerUnit
             );
             frames[i].name = $"{texture.name}_{i}";
         }
@@ -323,6 +437,7 @@ public class Monster : MonoBehaviour
     private MonsterConfig GetConfig(int typeNumber)
     {
         MonsterConfig result = new MonsterConfig();
+        result.pixelsPerUnit = 32.0f;
 
         switch (typeNumber)
         {
@@ -359,6 +474,27 @@ public class Monster : MonoBehaviour
                 result.attackRange = 1.05f;
                 result.attackCooldown = 1.2f;
                 result.animationFps = 10.0f;
+                break;
+            case 5:
+                result.frameSize = 64;
+                result.pixelsPerUnit = 32.0f; //화면에 보이는 크기
+                result.idleCount = 4;   //애니메이션 프레임 수
+                result.walkCount = 8;   //애니메이션 프레임 수
+                result.attackCount = 11;//애니메이션 프레임 수
+                result.hitCount = 4;    //애니메이션 프레임 수
+                result.deathCount = 12;//애니메이션 프레임 수
+                result.health = 4;      //체력
+                result.attackDamage = 2;//공격력
+                result.speed = 1.2f; //이동속도
+                result.detectionRange = 9.5f; //플레이어 감지 범위
+                result.attackRange = 6.0f;    //공격 범위
+                result.attackCooldown = 2.4f;//공격 쿨타임
+                result.animationFps = 12.0f; //애니메이션 재생 속도
+                result.isRanged = true; //원거리 공격 몬스터
+                result.projectileCount = 3; //탄 스프라이트 프레임 수
+                result.launchFrame = 6;  //공격 애니메이션 중 탄이 나가는 프레임
+                result.projectileSpeed = 5.5f; //탄 이동속도
+                result.keepDistance = 3.0f; //이보다 가까우면 물러선다
                 break;
             case 4:
                 result.frameSize = 96;
@@ -411,6 +547,7 @@ public class Monster : MonoBehaviour
         if (AnimationState.Attack == nextState || AnimationState.Special == nextState)
         {
             attackDamageApplied = false;
+            projectileLaunched = false;
         }
     }
 
@@ -475,5 +612,113 @@ public class Monster : MonoBehaviour
             default:
                 return idleFrames;
         }
+    }
+}
+
+/// <summary>
+/// 원거리 몬스터가 쏘는 탄. 벽에 닿거나 사거리를 넘으면 사라진다.
+/// 스프라이트는 몬스터가 이미 잘라둔 것을 넘겨받아 쓴다.
+/// </summary>
+public class MonsterProjectile : MonoBehaviour
+{
+    private const float Lifetime = 3.0f;
+    private const float HitRadius = 0.45f;
+
+    private TileMap tileMap;
+    private SpriteRenderer spriteRenderer;
+    private Player player;
+    private Sprite[] frames;
+
+    private Vector2 direction;
+    private float speed;
+    private float animationFps;
+    private int damage;
+    private float elapsed;
+
+    public static void Spawn(
+        TileMap map,
+        Vector3 origin,
+        Vector2 moveDirection,
+        int damageAmount,
+        float moveSpeed,
+        Player target,
+        Sprite[] sprites,
+        float fps)
+    {
+        if (null == sprites || 0 == sprites.Length)
+        {
+            return;
+        }
+
+        GameObject projectileObject = new GameObject("MonsterProjectile");
+        projectileObject.transform.position = new Vector3(origin.x, origin.y, 0.0f);
+
+        MonsterProjectile projectile = projectileObject.AddComponent<MonsterProjectile>();
+        projectile.tileMap = map;
+        projectile.direction = moveDirection.normalized;
+        projectile.damage = damageAmount;
+        projectile.speed = moveSpeed;
+        projectile.player = target;
+        projectile.frames = sprites;
+        projectile.animationFps = fps;
+        projectile.Setup();
+    }
+
+    private void Setup()
+    {
+        spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = 20;
+        ApplyFrame();
+    }
+
+    private void Update()
+    {
+        elapsed += Time.deltaTime;
+        transform.position += (Vector3)(direction * speed * Time.deltaTime);
+        ApplyFrame();
+
+        if (elapsed >= Lifetime || false == IsFloor(transform.position))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (null == player || true == player.IsDead)
+        {
+            return;
+        }
+
+        if (Vector2.Distance(transform.position, player.transform.position) <= HitRadius)
+        {
+            player.TakeDamage(damage);
+            Destroy(gameObject);
+        }
+    }
+
+    private bool IsFloor(Vector2 position)
+    {
+        if (null == tileMap)
+        {
+            return true;
+        }
+
+        Tile tile = tileMap.GetTile(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y));
+        if (null == tile || Tile.Type.Floor != tile.type)
+        {
+            return false;
+        }
+
+        return null == tile.door || Door.State.Open == tile.door.state;
+    }
+
+    private void ApplyFrame()
+    {
+        if (null == frames || 0 == frames.Length || null == spriteRenderer)
+        {
+            return;
+        }
+
+        int index = Mathf.FloorToInt(elapsed * animationFps) % frames.Length;
+        spriteRenderer.sprite = frames[index];
     }
 }

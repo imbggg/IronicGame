@@ -1,0 +1,780 @@
+fileFormatVersion: 2
+guid: 4ff771f97a87be04797c56f8bc80545f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8566224364074573591
+    second: Altar_Disappear_0
+  - first:
+      213: -1706769530328836719
+    second: Altar_Disappear_1
+  - first:
+      213: -2811884452387021059
+    second: Altar_Disappear_2
+  - first:
+      213: 1772618634441955662
+    second: Altar_Disappear_3
+  - first:
+      213: -2934696568737004551
+    second: Altar_Disappear_4
+  - first:
+      213: -5411157386006008044
+    second: Altar_Disappear_5
+  - first:
+      213: 2512828785174801050
+    second: Altar_Disappear_6
+  - first:
+      213: -7190558948047474467
+    second: Altar_Disappear_7
+  - first:
+      213: -7360534640628827627
+    second: Altar_Disappear_8
+  - first:
+      213: 208608275963184103
+    second: Altar_Disappear_9
+  - first:
+      213: -8264874992846655502
+    second: Altar_Disappear_10
+  - first:
+      213: -6671822700816206217
+    second: Altar_Disappear_11
+  - first:
+      213: 6654083698794996291
+    second: Altar_Disappear_12
+  - first:
+      213: 7810643332508447516
+    second: Altar_Disappear_13
+  - first:
+      213: -8691759194943390957
+    second: Altar_Disappear_14
+  - first:
+      213: -7013429015992495868
+    second: Altar_Disappear_15
+  - first:
+      213: 6317152544900107887
+    second: Altar_Disappear_16
+  - first:
+      213: 6970753953277302992
+    second: Altar_Disappear_17
+  - first:
+      213: 8134434995477675248
+    second: Altar_Disappear_18
+  - first:
+      213: 4777460675271354146
+    second: Altar_Disappear_19
+  - first:
+      213: 4852407148390228057
+    second: Altar_Disappear_20
+  - first:
+      213: -4653190356259600034
+    second: Altar_Disappear_21
+  - first:
+      213: -2315671938764742845
+    second: Altar_Disappear_22
+  - first:
+      213: 166683726643397324
+    second: Altar_Disappear_23
+  - first:
+      213: 1767906164745394398
+    second: Altar_Disappear_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Altar_Disappear_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 168
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e0e901a358ae1980800000000000000
+      internalID: -8566224364074573591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 172
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1951a4fa7265058e0800000000000000
+      internalID: -1706769530328836719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_2
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 192
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfe17021dfd2af8d0800000000000000
+      internalID: -2811884452387021059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_3
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 196
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e49962c914b999810800000000000000
+      internalID: 1772618634441955662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_4
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 193
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f38fd8f40dd547d0800000000000000
+      internalID: -2934696568737004551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_5
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 191
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41f6167e605b7e4b0800000000000000
+      internalID: -5411157386006008044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_6
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 175
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9a68b1777c5fd220800000000000000
+      internalID: 2512828785174801050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_7
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 168
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd0bf15ebb0063c90800000000000000
+      internalID: -7190558948047474467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_8
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 2
+        width: 178
+        height: 205
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51a7c5cfdb02ad990800000000000000
+      internalID: -7360534640628827627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_9
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e30ef92f1025e200800000000000000
+      internalID: 208608275963184103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_10
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 177
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ffad52bbf34d4d80800000000000000
+      internalID: -8264874992846655502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_11
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 177
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77676793a9ce863a0800000000000000
+      internalID: -6671822700816206217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_12
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 342a4648edd085c50800000000000000
+      internalID: 6654083698794996291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_13
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 173
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1370757abaf46c60800000000000000
+      internalID: 7810643332508447516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_14
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 173
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31bf928201ba06780800000000000000
+      internalID: -8691759194943390957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_15
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 401995cf77b4bae90800000000000000
+      internalID: -7013429015992495868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_16
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6ec9b615c80ba750800000000000000
+      internalID: 6317152544900107887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_17
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 2
+        width: 178
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d85eb1b9c71db060800000000000000
+      internalID: 6970753953277302992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_18
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 2
+        width: 178
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fcf3f1c78153e070800000000000000
+      internalID: 8134434995477675248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_19
+      rect:
+        serializedVersion: 2
+        x: 1416
+        y: 2
+        width: 168
+        height: 181
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22762fd0c23fc4240800000000000000
+      internalID: 4777460675271354146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_20
+      rect:
+        serializedVersion: 2
+        x: 1637
+        y: 2
+        width: 126
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 950ad51a796375340800000000000000
+      internalID: 4852407148390228057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_21
+      rect:
+        serializedVersion: 2
+        x: 1846
+        y: 2
+        width: 108
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e598fde460c8c6fb0800000000000000
+      internalID: -4653190356259600034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_22
+      rect:
+        serializedVersion: 2
+        x: 2058
+        y: 2
+        width: 84
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34f569104a41ddfd0800000000000000
+      internalID: -2315671938764742845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_23
+      rect:
+        serializedVersion: 2
+        x: 2283
+        y: 2
+        width: 34
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc20b6c57fd205200800000000000000
+      internalID: 166683726643397324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Altar_Disappear_24
+      rect:
+        serializedVersion: 2
+        x: 2492
+        y: 68
+        width: 16
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed85fd14a4dd88810800000000000000
+      internalID: 1767906164745394398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Altar_Disappear_0: -8566224364074573591
+      Altar_Disappear_1: -1706769530328836719
+      Altar_Disappear_10: -8264874992846655502
+      Altar_Disappear_11: -6671822700816206217
+      Altar_Disappear_12: 6654083698794996291
+      Altar_Disappear_13: 7810643332508447516
+      Altar_Disappear_14: -8691759194943390957
+      Altar_Disappear_15: -7013429015992495868
+      Altar_Disappear_16: 6317152544900107887
+      Altar_Disappear_17: 6970753953277302992
+      Altar_Disappear_18: 8134434995477675248
+      Altar_Disappear_19: 4777460675271354146
+      Altar_Disappear_2: -2811884452387021059
+      Altar_Disappear_20: 4852407148390228057
+      Altar_Disappear_21: -4653190356259600034
+      Altar_Disappear_22: -2315671938764742845
+      Altar_Disappear_23: 166683726643397324
+      Altar_Disappear_24: 1767906164745394398
+      Altar_Disappear_3: 1772618634441955662
+      Altar_Disappear_4: -2934696568737004551
+      Altar_Disappear_5: -5411157386006008044
+      Altar_Disappear_6: 2512828785174801050
+      Altar_Disappear_7: -7190558948047474467
+      Altar_Disappear_8: -7360534640628827627
+      Altar_Disappear_9: 208608275963184103
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

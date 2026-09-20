@@ -25,7 +25,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField, Min(1)] private int minimumMonstersPerRoom = 1;
     [SerializeField, Min(1)] private int maximumMonstersPerRoom = 2;
     [SerializeField, Range(0.0f, 1.0f)] private float monsterRoomSpawnChance = 0.75f;
-    [SerializeField, Min(1)] private int monsterTypeCount = 4;
+    [SerializeField, Min(1)] private int monsterTypeCount = 5;
 
     [Header("방 전투")]
     [SerializeField, InspectorName("방 전투 사용")]
@@ -87,6 +87,7 @@ public class DungeonGenerator : MonoBehaviour
         bossRoom = null != bossPrefab && null != player
             ? FindFarthestRoom(player.transform.position)
             : null;
+        SpawnBossAltar();
         SpawnMonsters();
         ConfigureRoomCombat();
     }
@@ -728,6 +729,38 @@ public class DungeonGenerator : MonoBehaviour
         player.Init(tileMap, spawnPosition);
     }
 
+    [Header("보스 제단")]
+    [SerializeField]
+    [Tooltip("제단 스프라이트의 Pixels Per Unit. 캐릭터와 같은 값으로 맞춘다.")]
+    private float altarPixelsPerUnit = 108.0f;
+
+    /// <summary>
+    /// 보스방 중앙에 제단을 놓는다. 보스는 제단을 사용해야 등장한다.
+    /// </summary>
+    private void SpawnBossAltar()
+    {
+        if (null == bossRoom)
+        {
+            return;
+        }
+
+        Tile altarTile = FindRoomCenterFloorTile(bossRoom);
+        if (null == altarTile)
+        {
+            altarTile = FindRoomFloorTile(bossRoom);
+        }
+
+        if (null == altarTile)
+        {
+            return;
+        }
+
+        BossAltar.Spawn(
+            new Vector3(altarTile.rect.x + 0.5f, altarTile.rect.y + 0.5f, 0.0f),
+            altarPixelsPerUnit
+        );
+    }
+
     public bool TrySummonBoss()
     {
         if (null != activeBoss || null != FindAnyObjectByType<Boss>())
@@ -785,20 +818,23 @@ public class DungeonGenerator : MonoBehaviour
             0.0f
         );
 
-        SpriteRenderer bossRenderer = bossObject.GetComponent<SpriteRenderer>();
-        if (null != bossRenderer)
-        {
-            bossRenderer.sortingOrder = 19;
-        }
-
         Boss boss = bossObject.GetComponent<Boss>();
         if (null == boss)
         {
             boss = bossObject.AddComponent<Boss>();
         }
 
-        boss.Init(tileMap);
+        // 보스가 플레이어를 매 프레임 찾지 않도록 참조를 넘겨준다.
+        boss.Init(tileMap, bossObject.transform.position, player, bossRoom.index);
         activeBoss = boss;
+
+        // 보스방은 몬스터가 없어서 RoomCombatSystem이 전투방으로 잡지 않는다.
+        // 소환 시점에 직접 잠가 도망치지 못하게 한다.
+        if (null != roomCombatSystem)
+        {
+            roomCombatSystem.LockRoomFromOutside(bossRoom.index);
+        }
+
         return true;
     }
 

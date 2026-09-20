@@ -4,169 +4,92 @@ using UnityEngine.SceneManagement;
 public class PauseMenuUI : MonoBehaviour
 {
     private static PauseMenuUI instance;
-
     [SerializeField] private string titleSceneName = "Title";
-
     private DungeonGenerator generator;
     private TitleMenu titleMenu;
     private bool paused;
+    private readonly IronicMenuStyle menu = new IronicMenuStyle();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateAutomatically()
     {
-        if (null != FindAnyObjectByType<PauseMenuUI>())
-        {
-            return;
-        }
-
-        GameObject menuObject = new GameObject("PauseMenuUI");
-        menuObject.AddComponent<PauseMenuUI>();
+        if (FindAnyObjectByType<PauseMenuUI>() != null) return;
+        new GameObject("PauseMenuUI").AddComponent<PauseMenuUI>();
     }
 
     private void Awake()
     {
-        if (null != instance && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
+        if (instance != null && instance != this) { Destroy(gameObject); return; }
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void OnDestroy()
     {
-        if (instance == this)
-        {
-            instance = null;
-        }
+        menu.Dispose();
+        if (instance == this) instance = null;
     }
 
     private void Update()
     {
         titleMenu = FindAnyObjectByType<TitleMenu>();
-
-        // 타이틀 화면에서는 ESC로 일시정지 메뉴가 뜨면 안 된다.
-        if (null != titleMenu && true == titleMenu.enabled)
-        {
-            paused = false;
-            return;
-        }
-
-        if (null == generator)
-        {
-            generator = FindAnyObjectByType<DungeonGenerator>();
-        }
-
-        if (null == generator)
-        {
-            paused = false;
-            return;
-        }
-
-        if (true == GameEndUI.IsShowing)
-        {
-            return;
-        }
-
-        if (true == IronicRewardUI.IsShowing)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SetPaused(false == paused);
-        }
+        if (titleMenu != null && titleMenu.enabled) { paused = false; return; }
+        if (generator == null) generator = FindAnyObjectByType<DungeonGenerator>();
+        if (generator == null) { paused = false; return; }
+        if (GameEndUI.IsShowing || IronicRewardUI.IsShowing) return;
+        if (Input.GetKeyDown(KeyCode.Escape)) SetPaused(!paused);
     }
 
     private void SetPaused(bool shouldPause)
     {
         paused = shouldPause;
-        Time.timeScale = true == paused ? 0.0f : 1.0f;
+        Time.timeScale = paused ? 0 : 1;
     }
 
     private void OnGUI()
     {
-        if (false == paused)
-        {
-            return;
-        }
-
-        if (null != titleMenu && true == titleMenu.enabled)
-        {
-            return;
-        }
-
+        if (!paused || (titleMenu != null && titleMenu.enabled)) return;
+        Matrix4x4 previousMatrix = GUI.matrix;
         Color previousColor = GUI.color;
-        GUI.color = new Color(0.02f, 0.01f, 0.04f, 0.86f);
-        GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Texture2D.whiteTexture);
-        GUI.color = previousColor;
-
-        float panelWidth = 420.0f;
-        float panelHeight = 500.0f;
-        float x = Screen.width * 0.5f - panelWidth * 0.5f;
-        float y = Screen.height * 0.5f - panelHeight * 0.5f;
-
-        GUIStyle titleStyle = new GUIStyle(GUI.skin.label);
-        titleStyle.fontSize = 42;
-        titleStyle.fontStyle = FontStyle.Bold;
-        titleStyle.alignment = TextAnchor.MiddleCenter;
-        titleStyle.normal.textColor = new Color(0.95f, 0.85f, 1.0f, 1.0f);
-
-        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
-        buttonStyle.fontSize = 22;
-        buttonStyle.fontStyle = FontStyle.Bold;
-
-        GUIStyle soundStyle = new GUIStyle(GUI.skin.label);
-        soundStyle.fontSize = 20;
-        soundStyle.fontStyle = FontStyle.Bold;
-        soundStyle.alignment = TextAnchor.MiddleCenter;
-        soundStyle.normal.textColor = Color.white;
-
-        GUI.Label(new Rect(x, y, panelWidth, 85.0f), "일시정지", titleStyle);
-
-        float currentVolume = RetroAudio.MasterVolume;
-        GUI.Label(
-            new Rect(x + 60.0f, y + 88.0f, panelWidth - 120.0f, 36.0f),
-            $"전체 사운드  {Mathf.RoundToInt(currentVolume * 100.0f)}%",
-            soundStyle
-        );
-
-        float changedVolume = GUI.HorizontalSlider(
-            new Rect(x + 70.0f, y + 128.0f, panelWidth - 140.0f, 28.0f),
-            currentVolume,
-            0.0f,
-            1.0f
-        );
-
-        if (0.001f < Mathf.Abs(changedVolume - currentVolume))
+        GUI.color = Color.white;
+        try
         {
-            RetroAudio.SetMasterVolume(changedVolume);
-        }
+            menu.Begin();
+            IronicMenuStyle.Fill(new Rect(0, 0, menu.Width, menu.Height), new Color(0.04f, 0.02f, 0.055f, 0.78f));
+            float y = (menu.Height - 480) * 0.5f;
+            menu.Heading(Row(y, 64), "일시정지");
 
-        if (GUI.Button(new Rect(x + 60.0f, y + 175.0f, panelWidth - 120.0f, 60.0f), "계속하기", buttonStyle))
-        {
-            SetPaused(false);
-        }
+            float volume = RetroAudio.MasterVolume;
+            menu.Caption(Row(y + 96, 40), $"전체 음량  {Mathf.RoundToInt(volume * 100)}%");
+            float changedVolume = menu.VolumeSlider(Row(y + 146, 32, 260), volume);
+            if (Mathf.Abs(changedVolume - volume) > 0.001f) RetroAudio.SetMasterVolume(changedVolume);
 
-        if (GUI.Button(new Rect(x + 60.0f, y + 255.0f, panelWidth - 120.0f, 60.0f), "직업 선택", buttonStyle))
-        {
-            SetPaused(false);
-            generator = null;
-            SceneManager.LoadScene(titleSceneName);
-        }
-
-        if (GUI.Button(new Rect(x + 60.0f, y + 335.0f, panelWidth - 120.0f, 60.0f), "게임 종료", buttonStyle))
-        {
-            SetPaused(false);
-
+            if (menu.Button(Row(y + 218), "계속하기")) SetPaused(false);
+            if (menu.Button(Row(y + 306), "직업 선택"))
+            {
+                SetPaused(false);
+                generator = null;
+                SceneManager.LoadScene(titleSceneName);
+            }
+            if (menu.Button(Row(y + 394), "게임 종료"))
+            {
+                SetPaused(false);
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+                UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+                Application.Quit();
 #endif
+            }
         }
+        finally
+        {
+            GUI.matrix = previousMatrix;
+            GUI.color = previousColor;
+        }
+    }
+
+    private Rect Row(float y, float height = 72, float width = 460)
+    {
+        return new Rect((menu.Width - width) * 0.5f, y, width, height);
     }
 }
