@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameEndUI : MonoBehaviour
 {
     private const string DefeatText = "패배";
-    private const string ClearText = "던전 클리어!";
+    private const string ClearText = "클리어!";
 
     private static GameEndUI instance;
 
@@ -18,7 +18,6 @@ public class GameEndUI : MonoBehaviour
     private bool showing;
     private string resultText;
     private Texture2D background;
-    private Texture2D defeatTitle;
     private readonly IronicMenuStyle menu = new IronicMenuStyle();
 
     public static bool IsShowing
@@ -36,7 +35,6 @@ public class GameEndUI : MonoBehaviour
 
         instance = this;
         background = LoadTexture(backgroundSpriteName);
-        defeatTitle = LoadTexture("Sprites/defeat");
     }
 
     private void OnDestroy()
@@ -133,17 +131,10 @@ public class GameEndUI : MonoBehaviour
         Rect panel = new Rect(x, y, panelWidth, panelHeight);
         IronicMenuStyle.Fill(panel, new Color(0.055f, 0.025f, 0.070f, 0.76f));
 
-        Texture2D resultTitle = DefeatText == resultText ? defeatTitle : null;
+        // 패배는 이미지, 클리어는 폰트로 그려서 둘의 모양이 달랐다.
+        // 같은 폰트로 통일한다.
         Rect titleArea = new Rect(x + 90.0f, y + 48.0f, panelWidth - 180.0f, 118.0f);
-
-        if (null != resultTitle)
-        {
-            GUI.DrawTexture(FitTexture(titleArea, resultTitle), resultTitle, ScaleMode.StretchToFill, true);
-        }
-        else
-        {
-            menu.Heading(titleArea, resultText, 58);
-        }
+        menu.Heading(titleArea, resultText, 58);
 
         menu.Caption(
             new Rect(x + 60.0f, y + 178.0f, panelWidth - 120.0f, 42.0f),
@@ -176,20 +167,5 @@ public class GameEndUI : MonoBehaviour
     {
         Sprite sprite = Resources.Load<Sprite>(resourcePath);
         return null != sprite ? sprite.texture : Resources.Load<Texture2D>(resourcePath);
-    }
-
-    private static Rect FitTexture(Rect area, Texture2D texture)
-    {
-        float textureRatio = (float)texture.width / texture.height;
-        float areaRatio = area.width / area.height;
-
-        if (textureRatio > areaRatio)
-        {
-            float height = area.width / textureRatio;
-            return new Rect(area.x, area.center.y - height * 0.5f, area.width, height);
-        }
-
-        float width = area.height * textureRatio;
-        return new Rect(area.center.x - width * 0.5f, area.y, width, area.height);
     }
 }

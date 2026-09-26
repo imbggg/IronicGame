@@ -959,6 +959,13 @@ public class Boss : MonoBehaviour, IDamageable
             return;
         }
 
+        // 결과 화면이 떠 있으면 그리지 않는다.
+        // Time.timeScale이 0이어도 OnGUI는 계속 돌기 때문에 직접 막아야 한다.
+        if (true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
         float barWidth = Screen.width * 0.5f;
         float barHeight = Mathf.Max(18.0f, Screen.height * 0.022f);
         float left = (Screen.width - barWidth) * 0.5f;
@@ -1471,7 +1478,13 @@ public class BossOrb : MonoBehaviour
             return false;
         }
 
-        return null == tile.door || Door.State.Open == tile.door.state;
+        if (null != tile.door && Door.State.Open != tile.door.state)
+        {
+            return false;
+        }
+
+        // 돌 같은 소품도 막는다. 보스 본체 이동은 이미 이걸 보고 있었다.
+        return false == PropBlock.IsBlocked(tile.index);
     }
 
     private void ApplyFrame()
