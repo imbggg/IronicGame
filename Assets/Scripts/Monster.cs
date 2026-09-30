@@ -41,6 +41,17 @@ public class Monster : MonoBehaviour, IDamageable
         public float keepDistance;      // 이보다 가까우면 물러선다
     }
 
+    /// <summary>탄이 몬스터 몸 밖에서 시작하도록 앞으로 밀어내는 거리.</summary>
+    private const float ProjectileSpawnOffset = 0.45f;
+
+    [Header("체력바")]
+    [SerializeField]
+    [Tooltip("몬스터 머리 위 어느 높이에 띄울지. 셀 크기에 비례해서 정해진다.")]
+    private float healthBarHeightRatio = 0.32f;
+
+    [SerializeField] private float healthBarWidth = 0.75f;
+    [SerializeField] private float healthBarThickness = 0.10f;
+
     [SerializeField] private float radius = 0.28f;
     [SerializeField, Range(0.0f, 1.0f)] private float specialAttackChance = 0.3f;
 
@@ -66,6 +77,10 @@ public class Monster : MonoBehaviour, IDamageable
     private int guaranteedBossFragmentCount;
     private Sprite[] projectileFrames;
     private bool projectileLaunched;
+
+    private static Sprite barSprite;
+    private Transform healthBarRoot;
+    private Transform healthBarFill;
 
     public int RoomIndex { get; private set; } = -1;
     public bool IsDefeated { get { return AnimationState.Death == state; } }
@@ -95,8 +110,86 @@ public class Monster : MonoBehaviour, IDamageable
 
         spriteRenderer.sortingOrder = 19;
         LoadAnimations();
+        CreateHealthBar();
         SetState(AnimationState.Idle);
         ApplyFrame(true);
+    }
+
+    // --- 체력바 -------------------------------------------------------
+
+    /// <summary>
+    /// 프리팹 없이 코드로 만든다. 1픽셀 흰색 스프라이트를 늘려서 막대로 쓴다.
+    /// 자식으로 달기 때문에 몬스터의 flipX 영향을 받지 않는다.
+    /// </summary>
+    private void CreateHealthBar()
+    {
+        if (null == barSprite)
+        {
+            Texture2D texture = new Texture2D(1, 1);
+            texture.SetPixel(0, 0, Color.white);
+            texture.filterMode = FilterMode.Point;
+            texture.Apply();
+
+            barSprite = Sprite.Create(
+                texture, new Rect(0.0f, 0.0f, 1.0f, 1.0f), new Vector2(0.5f, 0.5f), 1.0f);
+        }
+
+        // 셀 크기가 몬스터마다 달라서, 높이도 거기에 맞춰 띄운다.
+        float cellHeight = config.frameSize / config.pixelsPerUnit;
+        float barY = cellHeight * healthBarHeightRatio;
+
+        GameObject root = new GameObject("HealthBar");
+        root.transform.SetParent(transform, false);
+        root.transform.localPosition = new Vector3(0.0f, barY, 0.0f);
+        healthBarRoot = root.transform;
+
+        GameObject background = new GameObject("Background");
+        background.transform.SetParent(root.transform, false);
+        background.transform.localScale =
+            new Vector3(healthBarWidth, healthBarThickness, 1.0f);
+
+        SpriteRenderer backgroundRenderer = background.AddComponent<SpriteRenderer>();
+        backgroundRenderer.sprite = barSprite;
+        backgroundRenderer.color = new Color(0.10f, 0.08f, 0.12f, 0.85f);
+        backgroundRenderer.sortingOrder = 20;
+
+        // 채움은 왼쪽 끝을 기준으로 줄어들어야 해서, 피벗 대신 위치를 왼쪽으로 옮긴다.
+        GameObject fill = new GameObject("Fill");
+        fill.transform.SetParent(root.transform, false);
+        healthBarFill = fill.transform;
+
+        SpriteRenderer fillRenderer = fill.AddComponent<SpriteRenderer>();
+        fillRenderer.sprite = barSprite;
+        fillRenderer.sortingOrder = 21;
+
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (null == healthBarFill)
+        {
+            return;
+        }
+
+        float ratio = Mathf.Clamp01((float)health / Mathf.Max(1, config.health));
+
+        float filledWidth = healthBarWidth * ratio;
+        healthBarFill.localScale =
+            new Vector3(filledWidth, healthBarThickness, 1.0f);
+
+        // 줄어든 만큼 왼쪽으로 붙인다.
+        healthBarFill.localPosition =
+            new Vector3(-(healthBarWidth - filledWidth) * 0.5f, 0.0f, 0.0f);
+
+        SpriteRenderer fillRenderer = healthBarFill.GetComponent<SpriteRenderer>();
+        if (null != fillRenderer)
+        {
+            fillRenderer.color = Color.Lerp(
+                new Color(0.85f, 0.15f, 0.15f, 1.0f),
+                new Color(0.35f, 0.80f, 0.25f, 1.0f),
+                ratio);
+        }
     }
 
     private void Update()
@@ -203,10 +296,17 @@ public class Monster : MonoBehaviour, IDamageable
         }
 
         health -= damage;
+        UpdateHealthBar();
+
         if (0 >= health)
         {
             SetState(AnimationState.Death);
             RetroAudio.Play(RetroSound.MonsterDefeated);
+
+            if (null != healthBarRoot)
+            {
+                healthBarRoot.gameObject.SetActive(false);
+            }
 
             Collider2D monsterCollider = GetComponent<Collider2D>();
             if (null != monsterCollider)
@@ -292,10 +392,15 @@ public class Monster : MonoBehaviour, IDamageable
             direction = Vector2.right;
         }
 
+        direction.Normalize();
+
+        // 몬스터 중심에서 그대로 내보내면 탄이 몸 안에서 튀어나온다.
+        Vector3 origin = transform.position + (Vector3)(direction * ProjectileSpawnOffset);
+
         MonsterProjectile.Spawn(
             tileMap,
-            transform.position,
-            direction.normalized,
+            origin,
+            direction,
             GameData.GetMonsterAttackDamage(config.attackDamage),
             config.projectileSpeed,
             player,
@@ -668,6 +773,15 @@ public class MonsterProjectile : MonoBehaviour
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = 20;
+
+        // 탄 스프라이트는 오른쪽을 향해 그려져 있다.
+        // 돌려주지 않으면 아래로 날아가면서도 옆을 보고 있어 어색하다.
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
+
+        // 왼쪽으로 쏘면 180도 돌아가면서 위아래가 뒤집힌다. 그것만 되돌린다.
+        spriteRenderer.flipY = direction.x < 0.0f;
+
         ApplyFrame();
     }
 
@@ -708,7 +822,13 @@ public class MonsterProjectile : MonoBehaviour
             return false;
         }
 
-        return null == tile.door || Door.State.Open == tile.door.state;
+        if (null != tile.door && Door.State.Open != tile.door.state)
+        {
+            return false;
+        }
+
+        // 돌 같은 소품도 막는다. 몬스터 이동 판정은 이미 이걸 보고 있었다.
+        return false == PropBlock.IsBlocked(tile.index);
     }
 
     private void ApplyFrame()

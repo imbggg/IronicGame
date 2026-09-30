@@ -105,13 +105,27 @@ public class TitleMenu : MonoBehaviour
 
     private void DrawSettingsMenu()
     {
-        float y = menu.Height * 0.40f;
+        float y = menu.Height * 0.31f;
         menu.Heading(Row(y, 60), "환경설정");
+
         float volume = RetroAudio.MasterVolume;
         menu.Caption(Row(y + 98, 42), $"전체 음량  {Mathf.RoundToInt(volume * 100)}%");
         float changedVolume = menu.VolumeSlider(Row(y + 154, 32, 260), volume);
         if (Mathf.Abs(changedVolume - volume) > 0.001f) RetroAudio.SetMasterVolume(changedVolume);
-        if (menu.Button(Row(y + 226, 64), "뒤로", true)) ChangeMenu(MenuState.Main);
+
+        menu.Caption(Row(y + 222, 42), $"방 개수  {GameData.roomCount}개");
+        float changedRoomCount = menu.VolumeSlider(
+            Row(y + 278, 32, 260),
+            Mathf.InverseLerp(GameData.MinimumRoomCount, GameData.MaximumRoomCount, GameData.roomCount)
+        );
+        GameData.roomCount = Mathf.RoundToInt(Mathf.Lerp(
+            GameData.MinimumRoomCount,
+            GameData.MaximumRoomCount,
+            changedRoomCount
+        ));
+
+        menu.Caption(Row(y + 314, 32), "방이 많을수록 던전이 커집니다");
+        if (menu.Button(Row(y + 372, 64), "뒤로", true)) ChangeMenu(MenuState.Main);
     }
 
     private Rect Row(float y, float height = 72, float width = 460)

@@ -24,8 +24,14 @@ public class BossAltar : MonoBehaviour
     /// <summary>플레이어가 이 거리 안에 있어야 소환할 수 있다.</summary>
     public const float UseDistance = 2.0f;
 
+    /// <summary>다른 UI와 같은 폰트를 쓴다.</summary>
+    private const string FontPath = "Fonts/Galmuri11-Bold";
+    private const float ReferenceHeight = 900.0f;
+
     private static Sprite[] idleFrames;
     private static Sprite[] disappearFrames;
+
+    private GUIStyle promptStyle;
 
     private SpriteRenderer spriteRenderer;
     private Player player;
@@ -190,6 +196,35 @@ public class BossAltar : MonoBehaviour
         spriteRenderer.sprite = frames[index];
     }
 
+    private void EnsurePromptStyle()
+    {
+        if (null != promptStyle)
+        {
+            return;
+        }
+
+        Font font = Resources.Load<Font>(FontPath);
+        if (null == font)
+        {
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
+        promptStyle = new GUIStyle();
+        promptStyle.font = font;
+        promptStyle.fontStyle = FontStyle.Normal;
+        promptStyle.alignment = TextAnchor.MiddleCenter;
+        promptStyle.wordWrap = false;
+        promptStyle.clipping = TextClipping.Overflow;
+    }
+
+    private static void Fill(Rect rect, Color color)
+    {
+        Color previous = GUI.color;
+        GUI.color = color;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = previous;
+    }
+
     private void OnGUI()
     {
         if (true == disappearing || null == player || null == Camera.main)
@@ -202,18 +237,26 @@ public class BossAltar : MonoBehaviour
             return;
         }
 
+        if (true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
         PlayerInventory inventory = player.Inventory;
         if (null == inventory)
         {
             return;
         }
 
+        EnsurePromptStyle();
+
         int have = inventory.BossFragmentCount;
         int need = PlayerInventory.BossFragmentsRequired;
+        bool ready = have >= need;
 
-        string text = have >= need
-            ? "[2] 보스 소환"
-            : $"보스 소환석 조각 {have} / {need}";
+        string text = ready
+            ? "[2]  보스 소환"
+            : $"보스 소환석 조각  {have} / {need}";
 
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(
             transform.position + Vector3.up * 2.2f
@@ -226,34 +269,47 @@ public class BossAltar : MonoBehaviour
 
         screenPosition.y = Screen.height - screenPosition.y;
 
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height * 0.020f), 10, 26);
-        style.fontStyle = FontStyle.Bold;
-        style.alignment = TextAnchor.MiddleCenter;
-        style.wordWrap = false;
-        style.clipping = TextClipping.Overflow;
-        style.normal.textColor = have >= need
-            ? new Color(1.0f, 0.87f, 0.35f, 1.0f)
-            : new Color(0.80f, 0.78f, 0.86f, 1.0f);
+        float scale = Mathf.Max(0.6f, Screen.height / ReferenceHeight);
+        promptStyle.fontSize = Mathf.RoundToInt(20.0f * scale);
 
-        Vector2 textSize = style.CalcSize(new GUIContent(text));
-        float labelWidth = Mathf.Max(240.0f, textSize.x + 40.0f);
-        float labelHeight = Mathf.Max(56.0f, textSize.y + 26.0f);
+        Vector2 textSize = promptStyle.CalcSize(new GUIContent(text));
+        float boxWidth = textSize.x + 44.0f * scale;
+        float boxHeight = textSize.y + 22.0f * scale;
 
-        Rect labelRect = new Rect(
-            Mathf.Clamp(screenPosition.x - labelWidth * 0.5f, 6.0f,
-                Mathf.Max(6.0f, Screen.width - labelWidth - 6.0f)),
-            Mathf.Clamp(screenPosition.y - labelHeight - 8.0f, 6.0f,
-                Mathf.Max(6.0f, Screen.height - labelHeight - 6.0f)),
-            labelWidth,
-            labelHeight
+        Rect box = new Rect(
+            Mathf.Clamp(screenPosition.x - boxWidth * 0.5f, 6.0f,
+                Mathf.Max(6.0f, Screen.width - boxWidth - 6.0f)),
+            Mathf.Clamp(screenPosition.y - boxHeight - 8.0f, 6.0f,
+                Mathf.Max(6.0f, Screen.height - boxHeight - 6.0f)),
+            boxWidth,
+            boxHeight
         );
 
-        Color previousColor = GUI.color;
-        GUI.color = new Color(0.05f, 0.02f, 0.08f, 0.88f);
-        GUI.DrawTexture(labelRect, Texture2D.whiteTexture);
-        GUI.color = previousColor;
+        // 준비되면 은은하게 숨 쉬듯 밝아진다.
+        float pulse = ready
+            ? 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 4.0f)
+            : 0.0f;
 
-        GUI.Label(labelRect, text, style);
+        Color edge = ready
+            ? Color.Lerp(new Color32(150, 108, 46, 255), new Color32(255, 214, 110, 255), pulse)
+            : new Color32(92, 62, 92, 255);
+
+        Fill(new Rect(box.x, box.y + 3.0f * scale, box.width, box.height),
+            new Color(0.0f, 0.0f, 0.0f, 0.35f));
+        Fill(box, new Color32(18, 11, 24, 242));
+
+        float thickness = Mathf.Max(1.0f, 2.0f * scale);
+        Fill(new Rect(box.x, box.y, box.width, thickness), edge);
+        Fill(new Rect(box.x, box.yMax - thickness, box.width, thickness), edge);
+        Fill(new Rect(box.x, box.y, thickness, box.height), edge);
+        Fill(new Rect(box.xMax - thickness, box.y, thickness, box.height), edge);
+
+        promptStyle.normal.textColor = new Color(0.03f, 0.01f, 0.04f, 0.9f);
+        GUI.Label(new Rect(box.x + 1.0f, box.y + 2.0f, box.width, box.height), text, promptStyle);
+
+        promptStyle.normal.textColor = ready
+            ? new Color(1.0f, 0.87f, 0.35f, 1.0f)
+            : new Color(0.80f, 0.78f, 0.86f, 1.0f);
+        GUI.Label(box, text, promptStyle);
     }
 }

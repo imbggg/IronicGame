@@ -327,6 +327,10 @@ public class Boss : MonoBehaviour, IDamageable
     [SerializeField, Tooltip("벽/타일 충돌용 반경. 너무 키우면 보스가 좁은 길을 못 지나간다.")]
     private float radius = 0.6f;
 
+    [SerializeField]
+    [Tooltip("원점에서 발밑까지의 거리. 피벗이 스프라이트 가운데라 이만큼 내려야 실제로 서 있는 칸을 검사한다.")]
+    private float feetOffset = 1.2f;
+
     // 프리팹에 콜라이더가 없을 때만 쓰는 기본값. 피격 판정용이라 몸통 크기에 맞춘다.
     private const float defaultColliderRadius = 1.3f;
     [SerializeField] private int lootFragmentCount = 0;
@@ -346,6 +350,15 @@ public class Boss : MonoBehaviour, IDamageable
     private readonly List<BossState> attackCandidates = new List<BossState>();
 
     private int phase = 1;
+
+    // 체력바
+    private const string FontPath = "Fonts/Galmuri11-Bold";
+    private const float BarReferenceHeight = 900.0f;
+    private const float DamageTrailSpeed = 28.0f;   // 뒤따라오는 흰 막대가 줄어드는 속도
+
+    private GUIStyle barStyle;
+    private float displayedHealth = MaxHealth;      // 실제 체력을 천천히 따라온다
+
     private bool castTriggered;
     private bool defeatHandled;
     private bool initialized;
@@ -825,23 +838,49 @@ public class Boss : MonoBehaviour, IDamageable
         transform.position = new Vector3(position.x, position.y, 0.0f);
     }
 
+    /// <summary>
+    /// 몸이 걸치는 칸을 전부 본다.
+    /// 네 모서리만 보면 반경이 0.5를 넘을 때 가운데 칸이 검사에서 빠져,
+    /// 보스가 자기 발밑의 돌을 그대로 통과한다.
+    /// </summary>
     private bool CanMove(Vector2 position)
     {
-        return
-            IsFloor(position.x - radius, position.y - radius)
-            && IsFloor(position.x + radius, position.y - radius)
-            && IsFloor(position.x - radius, position.y + radius)
-            && IsFloor(position.x + radius, position.y + radius);
+        // 피벗이 스프라이트 가운데라 원점은 보스 가슴께에 있다.
+        // 그대로 검사하면 발밑의 돌이 범위 밖으로 빠진다.
+        Vector2 feet = new Vector2(position.x, position.y - feetOffset);
+
+        int xMin = Mathf.FloorToInt(feet.x - radius);
+        int xMax = Mathf.FloorToInt(feet.x + radius);
+        int yMin = Mathf.FloorToInt(feet.y - radius);
+        int yMax = Mathf.FloorToInt(feet.y + radius);
+
+        for (int y = yMin; y <= yMax; y++)
+        {
+            for (int x = xMin; x <= xMax; x++)
+            {
+                if (false == IsFloorTile(x, y))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private bool IsFloor(float worldX, float worldY)
+    {
+        return IsFloorTile(Mathf.FloorToInt(worldX), Mathf.FloorToInt(worldY));
+    }
+
+    private bool IsFloorTile(int x, int y)
     {
         if (null == tileMap)
         {
             return false;
         }
 
-        Tile tile = tileMap.GetTile(Mathf.FloorToInt(worldX), Mathf.FloorToInt(worldY));
+        Tile tile = tileMap.GetTile(x, y);
         if (null == tile || Tile.Type.Floor != tile.type)
         {
             return false;
@@ -952,6 +991,54 @@ public class Boss : MonoBehaviour, IDamageable
     // 체력바
     // ─────────────────────────────────────────────
 
+    /// <summary>선택하면 충돌 검사 상자가 보인다. 발밑에 맞았는지 눈으로 확인한다.</summary>
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 feet = transform.position + Vector3.down * feetOffset;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(feet, new Vector3(radius * 2.0f, radius * 2.0f, 0.0f));
+    }
+
+    /// <summary>다른 UI와 같은 폰트를 쓴다.</summary>
+    private void EnsureBarStyle()
+    {
+        if (null != barStyle)
+        {
+            return;
+        }
+
+        Font font = Resources.Load<Font>(FontPath);
+        if (null == font)
+        {
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
+        barStyle = new GUIStyle();
+        barStyle.font = font;
+        barStyle.fontStyle = FontStyle.Normal;
+        barStyle.alignment = TextAnchor.MiddleCenter;
+        barStyle.wordWrap = false;
+        barStyle.clipping = TextClipping.Overflow;
+    }
+
+    private static void Fill(Rect rect, Color color)
+    {
+        Color previous = GUI.color;
+        GUI.color = color;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = previous;
+    }
+
+    /// <summary>테두리를 네 변으로 그린다. 가운데를 비워야 안쪽 색이 보인다.</summary>
+    private static void Frame(Rect rect, float thickness, Color color)
+    {
+        Fill(new Rect(rect.x, rect.y, rect.width, thickness), color);
+        Fill(new Rect(rect.x, rect.yMax - thickness, rect.width, thickness), color);
+        Fill(new Rect(rect.x, rect.y, thickness, rect.height), color);
+        Fill(new Rect(rect.xMax - thickness, rect.y, thickness, rect.height), color);
+    }
+
     private void OnGUI()
     {
         if (BossState.Death == state || 0 >= health || false == initialized)
@@ -959,33 +1046,85 @@ public class Boss : MonoBehaviour, IDamageable
             return;
         }
 
-        float barWidth = Screen.width * 0.5f;
-        float barHeight = Mathf.Max(18.0f, Screen.height * 0.022f);
+        // 결과 화면이 떠 있으면 그리지 않는다.
+        // Time.timeScale이 0이어도 OnGUI는 계속 돌기 때문에 직접 막아야 한다.
+        if (true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
+        EnsureBarStyle();
+
+        // 맞은 만큼 흰 막대가 뒤늦게 줄어든다. 타격감이 살아난다.
+        displayedHealth = Mathf.MoveTowards(
+            displayedHealth, health, DamageTrailSpeed * Time.unscaledDeltaTime);
+
+        float scale = Mathf.Max(0.6f, Screen.height / BarReferenceHeight);
+
+        float barWidth = Mathf.Min(Screen.width * 0.44f, 620.0f * scale);
+        float barHeight = 22.0f * scale;
         float left = (Screen.width - barWidth) * 0.5f;
-        float top = Screen.height * 0.045f;
+        float top = 26.0f * scale;
 
-        Rect background = new Rect(left, top, barWidth, barHeight);
-        Rect fill = new Rect(left, top, barWidth * ((float)health / MaxHealth), barHeight);
+        bool phaseTwo = 2 <= phase;
 
-        Color previousColor = GUI.color;
+        Color fillColor = phaseTwo
+            ? new Color32(238, 190, 62, 255)
+            : new Color32(196, 44, 66, 255);
+        Color glowColor = phaseTwo
+            ? new Color32(255, 231, 150, 255)
+            : new Color32(238, 108, 116, 255);
 
-        GUI.color = new Color(0.05f, 0.02f, 0.08f, 0.88f);
-        GUI.DrawTexture(background, Texture2D.whiteTexture);
+        Rect outer = new Rect(left, top, barWidth, barHeight);
+        Rect inner = new Rect(
+            outer.x + 2.0f * scale, outer.y + 2.0f * scale,
+            outer.width - 4.0f * scale, outer.height - 4.0f * scale);
 
-        GUI.color = 2 <= phase
-            ? new Color(0.98f, 0.80f, 0.20f, 1.0f)
-            : new Color(0.80f, 0.20f, 0.30f, 1.0f);
-        GUI.DrawTexture(fill, Texture2D.whiteTexture);
+        // 바탕 그림자 → 홈 → 테두리
+        Fill(new Rect(outer.x, outer.y + 3.0f * scale, outer.width, outer.height),
+            new Color(0.0f, 0.0f, 0.0f, 0.35f));
+        Fill(outer, new Color32(18, 11, 24, 240));
+        Frame(outer, Mathf.Max(1.0f, 2.0f * scale), new Color32(92, 62, 92, 255));
 
-        GUI.color = previousColor;
+        // 뒤따라오는 피해 표시
+        float trailRatio = Mathf.Clamp01(displayedHealth / MaxHealth);
+        Fill(new Rect(inner.x, inner.y, inner.width * trailRatio, inner.height),
+            new Color(0.92f, 0.86f, 0.88f, 0.55f));
 
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height * 0.020f), 10, 26);
-        style.fontStyle = FontStyle.Bold;
-        style.alignment = TextAnchor.MiddleCenter;
-        style.normal.textColor = Color.white;
+        // 실제 체력
+        float ratio = Mathf.Clamp01((float)health / MaxHealth);
+        Rect fill = new Rect(inner.x, inner.y, inner.width * ratio, inner.height);
+        Fill(fill, fillColor);
 
-        GUI.Label(background, $"BOSS   {health} / {MaxHealth}", style);
+        // 위쪽 밝은 선으로 입체감을 준다.
+        Fill(new Rect(fill.x, fill.y, fill.width, Mathf.Max(1.0f, fill.height * 0.28f)),
+            glowColor);
+
+        // 10씩 눈금. 남은 체력을 어림잡기 쉬워진다.
+        Color notch = new Color(0.0f, 0.0f, 0.0f, 0.35f);
+        for (int i = 10; i < MaxHealth; i += 10)
+        {
+            float notchX = inner.x + inner.width * (i / (float)MaxHealth);
+            Fill(new Rect(notchX, inner.y, Mathf.Max(1.0f, scale), inner.height), notch);
+        }
+
+        // 글자는 막대 위에 얹는다. 막대 안에 넣으면 색과 겹쳐 읽기 어렵다.
+        string label = $"{health} / {MaxHealth}";
+
+        barStyle.fontSize = Mathf.RoundToInt(17.0f * scale);
+
+        Rect textRect = new Rect(
+            outer.x, outer.y - 26.0f * scale, outer.width, 24.0f * scale);
+
+        barStyle.normal.textColor = new Color(0.03f, 0.01f, 0.04f, 0.9f);
+        GUI.Label(
+            new Rect(textRect.x + 1.0f, textRect.y + 2.0f, textRect.width, textRect.height),
+            label, barStyle);
+
+        barStyle.normal.textColor = phaseTwo
+            ? new Color32(255, 226, 150, 255)
+            : new Color32(226, 186, 206, 255);
+        GUI.Label(textRect, label, barStyle);
     }
 }
 
@@ -1471,7 +1610,13 @@ public class BossOrb : MonoBehaviour
             return false;
         }
 
-        return null == tile.door || Door.State.Open == tile.door.state;
+        if (null != tile.door && Door.State.Open != tile.door.state)
+        {
+            return false;
+        }
+
+        // 돌 같은 소품도 막는다. 보스 본체 이동은 이미 이걸 보고 있었다.
+        return false == PropBlock.IsBlocked(tile.index);
     }
 
     private void ApplyFrame()

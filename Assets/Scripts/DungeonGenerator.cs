@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    [Header("던전 크기")]
+    [Min(1), InspectorName("생성에 적용된 방 개수")]
+    [Tooltip("게임 시작 화면의 환경설정에서 선택한 방 개수가 자동으로 적용됩니다.")]
     public int roomCount = 15;
     public int minRoomSize = 5;
     public int maxRoomSize = 12;
@@ -47,6 +50,12 @@ public class DungeonGenerator : MonoBehaviour
 
     public void Generate()
     {
+        roomCount = Mathf.Clamp(
+            GameData.roomCount,
+            GameData.MinimumRoomCount,
+            GameData.MaximumRoomCount
+        );
+
         blocks.Clear();
         rooms.Clear();
         doors.Clear();

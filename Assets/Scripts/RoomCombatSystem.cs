@@ -6,6 +6,18 @@ public class RoomCombatSystem : MonoBehaviour
     private const float DoorLockDelay = 0.8f;
     private const float SafeDoorDistance = 1.15f;
 
+    /// <summary>다른 UI와 같은 폰트를 쓴다. 없으면 유니티 기본 폰트로 떨어진다.</summary>
+    private const string FontPath = "Fonts/Galmuri11-Bold";
+
+    /// <summary>이 화면 높이를 기준으로 글자 크기를 정하고, 실제 높이에 맞춰 늘린다.</summary>
+    private const float ReferenceHeight = 900.0f;
+
+    [SerializeField]
+    [Tooltip("전투 안내 문구 크기. 화면 높이에 맞춰 자동으로 늘어난다.")]
+    private int combatLabelFontSize = 22;
+
+    private GUIStyle combatLabelStyle;
+
     private DungeonGenerator generator;
     private Player player;
     private int startRoomIndex = -1;
@@ -271,6 +283,32 @@ public class RoomCombatSystem : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 스타일은 한 번만 만든다. OnGUI는 매 프레임 여러 번 호출되기 때문에
+    /// 여기서 new GUIStyle을 하면 계속 새로 만들어진다.
+    /// </summary>
+    private void EnsureCombatLabelStyle()
+    {
+        if (null != combatLabelStyle)
+        {
+            return;
+        }
+
+        Font font = Resources.Load<Font>(FontPath);
+        if (null == font)
+        {
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
+        combatLabelStyle = new GUIStyle();
+        combatLabelStyle.font = font;
+        combatLabelStyle.fontStyle = FontStyle.Normal;
+        combatLabelStyle.alignment = TextAnchor.UpperCenter;
+        combatLabelStyle.wordWrap = true;
+        combatLabelStyle.clipping = TextClipping.Overflow;
+        combatLabelStyle.padding = new RectOffset(4, 4, 10, 10);
+    }
+
     private void OnGUI()
     {
         if (0 > activeRoomIndex || true == IronicRewardUI.IsShowing)
@@ -278,32 +316,35 @@ public class RoomCombatSystem : MonoBehaviour
             return;
         }
 
+        // 결과 화면이 떠 있으면 그리지 않는다.
+        if (true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
+        EnsureCombatLabelStyle();
+
         int livingCount = CountLivingMonsters(activeRoomIndex);
-        GUIStyle style = new GUIStyle(GUI.skin.label);
+        string text = $"전투 중\n남은 몬스터 {livingCount}";
 
-        // 글자 크기
-        style.fontSize = 22;
-        style.fontStyle = FontStyle.Bold;
-        style.alignment = TextAnchor.MiddleCenter;
+        // 화면이 커지면 글자도 같이 커진다.
+        float scale = Mathf.Max(0.6f, Screen.height / ReferenceHeight);
+        combatLabelStyle.fontSize = Mathf.RoundToInt(combatLabelFontSize * scale);
 
-        // 좁은 화면에서는 자동 줄바꿈
-        style.wordWrap = true;
-        style.clipping = TextClipping.Overflow;
-
-        // 글자와 글자칸 가장자리 사이의 여백
-        style.padding = new RectOffset(4, 4, 10, 10);
-
-        style.normal.textColor = new Color(1.0f, 0.36f, 0.30f, 1.0f);
-
-        // 화면보다 커지지 않도록 글자칸 너비 조절
-        float textWidth = Mathf.Clamp(Screen.width - 20.0f, 60.0f, 360.0f);
-        float textHeight = 110.0f;
+        float textWidth = Mathf.Clamp(Screen.width - 20.0f, 60.0f, 620.0f);
+        float textHeight = combatLabelStyle.CalcHeight(new GUIContent(text), textWidth);
         float textX = (Screen.width - textWidth) * 0.5f;
 
+        Rect labelRect = new Rect(textX, 10.0f, textWidth, textHeight);
+
+        // 밝은 바닥 위에서도 읽히도록 어두운 그림자를 먼저 깐다.
+        combatLabelStyle.normal.textColor = new Color(0.05f, 0.02f, 0.03f, 0.85f);
         GUI.Label(
-            new Rect(textX, 8.0f, textWidth, textHeight),
-            $"전투 중\n남은 몬스터 {livingCount}",
-            style
-        );
+            new Rect(labelRect.x + 2.0f, labelRect.y + 2.0f, labelRect.width, labelRect.height),
+            text,
+            combatLabelStyle);
+
+        combatLabelStyle.normal.textColor = new Color(1.0f, 0.36f, 0.30f, 1.0f);
+        GUI.Label(labelRect, text, combatLabelStyle);
     }
 }

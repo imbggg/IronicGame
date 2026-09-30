@@ -1,7 +1,11 @@
 public static class GameData
 {
+    public const int MinimumRoomCount = 5;
+    public const int MaximumRoomCount = 30;
+
     public static int selectedCharacter = 0;
     public static int difficulty = 1;
+    public static int roomCount = 15;
     public static float elapsedTime = 0.0f;
 
     public static string GetDifficultyName()

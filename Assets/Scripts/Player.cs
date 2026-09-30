@@ -184,6 +184,34 @@ public class Player : MonoBehaviour
     {
         this.tileMap = tileMap;
         transform.position = new Vector3(startPosition.x, startPosition.y, 0.0f);
+
+        // 던전 생성이 끝나고 여기서 시작 위치로 옮겨진다.
+        // 카메라를 같이 옮기지 않으면 첫 입력이 들어올 때까지 원점을 비춘다.
+        UpdateCamera();
+    }
+
+    /// <summary>
+    /// 카메라를 플레이어 위치로 옮긴다.
+    /// 이동 처리 안에 두면 방향키를 누르기 전까지 호출되지 않는다.
+    /// </summary>
+    private void UpdateCamera()
+    {
+        Camera camera = Camera.main;
+        if (null == camera)
+        {
+            return;
+        }
+
+        camera.transform.position =
+            new Vector3(transform.position.x, transform.position.y, -10.0f);
+    }
+
+    /// <summary>
+    /// 이동이 모두 끝난 뒤에 따라가야 화면이 떨리지 않는다.
+    /// </summary>
+    private void LateUpdate()
+    {
+        UpdateCamera();
     }
 
     /// <summary>
@@ -271,22 +299,22 @@ public class Player : MonoBehaviour
         float horizontal = 0.0f;
         float vertical = 0.0f;
 
-        if (true == Input.GetKey(KeyCode.LeftArrow) || true == Input.GetKey(KeyCode.A))
+        if (true == Input.GetKey(KeyCode.LeftArrow))
         {
             horizontal -= 1.0f;
         }
 
-        if (true == Input.GetKey(KeyCode.RightArrow) || true == Input.GetKey(KeyCode.D))
+        if (true == Input.GetKey(KeyCode.RightArrow))
         {
             horizontal += 1.0f;
         }
 
-        if (true == Input.GetKey(KeyCode.DownArrow) || true == Input.GetKey(KeyCode.S))
+        if (true == Input.GetKey(KeyCode.DownArrow))
         {
             vertical -= 1.0f;
         }
 
-        if (true == Input.GetKey(KeyCode.UpArrow) || true == Input.GetKey(KeyCode.W))
+        if (true == Input.GetKey(KeyCode.UpArrow))
         {
             vertical += 1.0f;
         }
@@ -330,12 +358,6 @@ public class Player : MonoBehaviour
         }
 
         transform.position = new Vector3(position.x, position.y, 0.0f);
-
-        Camera camera = Camera.main;
-        if (null != camera)
-        {
-            camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10.0f);
-        }
     }
 
     // --- 공격 ---------------------------------------------------------
@@ -438,8 +460,42 @@ public class Player : MonoBehaviour
                 continue;
             }
 
+            // 보스처럼 판정 원이 큰 상대는 몸이 벽이나 돌 뒤에 있어도 원이 앞까지 나온다.
+            // 실제로 팔이 닿을 수 있는 자리인지 한 번 더 본다.
+            if (false == IsPathClear(transform.position, hits[i].transform.position))
+            {
+                continue;
+            }
+
             target.TakeDamage(GetModifiedDamage(damage));
         }
+    }
+
+    /// <summary>한 프레임에 한 칸을 건너뛰지 않도록, 이 간격마다 경로를 찍어본다.</summary>
+    private const float MeleePathStep = 0.2f;
+
+    /// <summary>두 점 사이에 벽, 닫힌 문, 소품이 없는지 확인한다.</summary>
+    private bool IsPathClear(Vector2 from, Vector2 to)
+    {
+        if (null == tileMap)
+        {
+            return true;
+        }
+
+        float distance = Vector2.Distance(from, to);
+        int steps = Mathf.Max(1, Mathf.CeilToInt(distance / MeleePathStep));
+
+        for (int i = 1; i <= steps; i++)
+        {
+            Vector2 point = Vector2.Lerp(from, to, (float)i / steps);
+
+            if (false == IsFloor(point.x, point.y))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void SpawnMageSmashEffect()
@@ -525,7 +581,8 @@ public class Player : MonoBehaviour
 
             if (null != projectile)
             {
-                projectile.Initialize(direction, attackPowerMultiplier);
+                projectile.Initialize(
+                    direction, attackPowerMultiplier, tileMap, transform.position);
             }
         }
     }
@@ -556,7 +613,8 @@ public class Player : MonoBehaviour
 
         if (null != projectile)
         {
-            projectile.Initialize(direction, attackPowerMultiplier);
+            projectile.Initialize(
+                    direction, attackPowerMultiplier, tileMap, transform.position);
         }
     }
 

@@ -7,6 +7,16 @@ public class LootChest : MonoBehaviour
     private const float HealthPotionChance = 0.30f;
     private const float BossFragmentChance = 0.03f;
 
+    /// <summary>다른 UI와 같은 폰트를 쓴다.</summary>
+    private const string FontPath = "Fonts/Galmuri11-Bold";
+    private const float ReferenceHeight = 900.0f;
+
+    private static readonly Color PromptColor = new Color32(226, 186, 206, 255);
+    private static readonly Color PotionColor = new Color32(140, 216, 130, 255);
+    private static readonly Color FragmentColor = new Color32(255, 214, 110, 255);
+    private static readonly Color EmptyColor = new Color32(151, 132, 158, 255);
+    private static readonly Color FullColor = new Color32(241, 115, 119, 255);
+
     private static Sprite closedSprite;
     private static Sprite openSprite;
 
@@ -16,6 +26,8 @@ public class LootChest : MonoBehaviour
     private float openedElapsed;
     private int guaranteedBossFragmentCount;
     private string message = string.Empty;
+    private Color messageColor = PromptColor;
+    private GUIStyle labelStyle;
 
     public static void Spawn(Vector3 position, int guaranteedFragments = 0)
     {
@@ -83,6 +95,7 @@ public class LootChest : MonoBehaviour
             openedElapsed = 0.0f;
             spriteRenderer.sprite = openSprite;
             message = "꽝!";
+            messageColor = EmptyColor;
             RetroAudio.Play(RetroSound.ChestOpen);
             return;
         }
@@ -99,24 +112,63 @@ public class LootChest : MonoBehaviour
         if (false == inventory.TryAddItem(itemType, rewardAmount))
         {
             message = "인벤토리가 가득 참";
+            messageColor = FullColor;
             return;
         }
 
         opened = true;
         openedElapsed = 0.0f;
         spriteRenderer.sprite = openSprite;
-        message = InventoryItemType.HealthPotion == itemType
+        bool isPotion = InventoryItemType.HealthPotion == itemType;
+
+        message = isPotion
             ? "체력 포션 획득!"
             : 1 < rewardAmount
                 ? $"보스 소환석 조각 x{rewardAmount}"
                 : "보스 소환석 조각 획득!";
 
+        messageColor = isPotion ? PotionColor : FragmentColor;
+
         RetroAudio.Play(RetroSound.ChestOpen);
+    }
+
+    private void EnsureLabelStyle()
+    {
+        if (null != labelStyle)
+        {
+            return;
+        }
+
+        Font font = Resources.Load<Font>(FontPath);
+        if (null == font)
+        {
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
+        labelStyle = new GUIStyle();
+        labelStyle.font = font;
+        labelStyle.fontStyle = FontStyle.Normal;
+        labelStyle.alignment = TextAnchor.MiddleCenter;
+        labelStyle.wordWrap = false;
+        labelStyle.clipping = TextClipping.Overflow;
+    }
+
+    private static void Fill(Rect rect, Color color)
+    {
+        Color previous = GUI.color;
+        GUI.color = color;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = previous;
     }
 
     private void OnGUI()
     {
         if (null == Camera.main || null == player)
+        {
+            return;
+        }
+
+        if (true == GameEndUI.IsShowing)
         {
             return;
         }
@@ -135,44 +187,61 @@ public class LootChest : MonoBehaviour
 
         screenPosition.y = Screen.height - screenPosition.y;
 
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.fontSize = Mathf.Clamp(Mathf.RoundToInt(Screen.height * 0.020f), 10, 26);
-        style.fontStyle = FontStyle.Bold;
-        style.alignment = TextAnchor.MiddleCenter;
-        style.wordWrap = false;
-        style.clipping = TextClipping.Overflow;
-        style.normal.textColor = new Color(1.0f, 0.87f, 0.35f, 1.0f);
+        EnsureLabelStyle();
 
-        string text = true == string.IsNullOrEmpty(message) ? "[E] 상자 열기" : message;
+        bool hasMessage = false == string.IsNullOrEmpty(message);
+        string text = hasMessage ? message : "[E]  상자 열기";
+        Color color = hasMessage ? messageColor : PromptColor;
+
+        float scale = Mathf.Max(0.6f, Screen.height / ReferenceHeight);
+        labelStyle.fontSize = Mathf.RoundToInt(20.0f * scale);
+
         GUIContent content = new GUIContent(text);
         float maximumWidth = Mathf.Max(40.0f, Screen.width - 12.0f);
 
-        while (style.fontSize > 8 && style.CalcSize(content).x + 24.0f > maximumWidth)
+        while (labelStyle.fontSize > 10
+            && labelStyle.CalcSize(content).x + 44.0f * scale > maximumWidth)
         {
-            style.fontSize--;
+            labelStyle.fontSize--;
         }
 
-        Vector2 textSize = style.CalcSize(content);
-        float labelWidth = Mathf.Min(maximumWidth, Mathf.Max(220.0f, textSize.x + 40.0f));
-        float labelHeight = Mathf.Max(60.0f, textSize.y + 30.0f);
-        float labelX = Mathf.Clamp(
-            screenPosition.x - labelWidth * 0.5f,
-            6.0f,
-            Mathf.Max(6.0f, Screen.width - labelWidth - 6.0f)
-        );
-        float labelY = Mathf.Clamp(
-            screenPosition.y - labelHeight - 8.0f,
-            6.0f,
-            Mathf.Max(6.0f, Screen.height - labelHeight - 6.0f)
-        );
-        Rect labelRect = new Rect(labelX, labelY, labelWidth, labelHeight);
+        Vector2 textSize = labelStyle.CalcSize(content);
+        float boxWidth = textSize.x + 44.0f * scale;
+        float boxHeight = textSize.y + 22.0f * scale;
 
-        Color previousColor = GUI.color;
-        GUI.color = new Color(0.05f, 0.02f, 0.08f, 0.88f);
-        GUI.DrawTexture(labelRect, Texture2D.whiteTexture);
-        GUI.color = previousColor;
+        // 획득 메시지는 끝날 때쯤 서서히 사라진다.
+        float alpha = 1.0f;
+        if (true == opened)
+        {
+            float remaining = MessageDuration - openedElapsed;
+            alpha = Mathf.Clamp01(remaining / 0.35f);
+        }
 
-        GUI.Label(labelRect, text, style);
+        Rect box = new Rect(
+            Mathf.Clamp(screenPosition.x - boxWidth * 0.5f, 6.0f,
+                Mathf.Max(6.0f, Screen.width - boxWidth - 6.0f)),
+            Mathf.Clamp(screenPosition.y - boxHeight - 8.0f, 6.0f,
+                Mathf.Max(6.0f, Screen.height - boxHeight - 6.0f)),
+            boxWidth,
+            boxHeight
+        );
+
+        Fill(new Rect(box.x, box.y + 3.0f * scale, box.width, box.height),
+            new Color(0.0f, 0.0f, 0.0f, 0.35f * alpha));
+        Fill(box, new Color(0.07f, 0.043f, 0.094f, 0.95f * alpha));
+
+        float thickness = Mathf.Max(1.0f, 2.0f * scale);
+        Color edge = new Color(color.r, color.g, color.b, 0.85f * alpha);
+        Fill(new Rect(box.x, box.y, box.width, thickness), edge);
+        Fill(new Rect(box.x, box.yMax - thickness, box.width, thickness), edge);
+        Fill(new Rect(box.x, box.y, thickness, box.height), edge);
+        Fill(new Rect(box.xMax - thickness, box.y, thickness, box.height), edge);
+
+        labelStyle.normal.textColor = new Color(0.03f, 0.01f, 0.04f, 0.9f * alpha);
+        GUI.Label(new Rect(box.x + 1.0f, box.y + 2.0f, box.width, box.height), content, labelStyle);
+
+        labelStyle.normal.textColor = new Color(color.r, color.g, color.b, alpha);
+        GUI.Label(box, content, labelStyle);
     }
 
     private static void CreateSpritesIfNeeded()
