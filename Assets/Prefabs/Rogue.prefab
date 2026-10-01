@@ -148,16 +148,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   moveSpeed: 6
   radius: 0.3
-  shurikenPrefab: {fileID: 0}
-  shurikenSpawnPoint: {fileID: 0}
+  maxHealth: 10
+  invincibleDuration: 0.6
+  classIndexOverride: -1
   arrowPrefab: {fileID: 0}
   arrowSpawnPoint: {fileID: 0}
-  rollSpeed: 12
-  rollDuration: 0.5
-  attackAnimSpeed: 0.7
-  rollSprite: {fileID: 21300000, guid: 32a9ed431a9961a4da3401bd111699a8, type: 3}
-  rollSpinSpeed: 720
+  arrowSpawnDistance: 1
+  groundSpikeDamage: 2
+  groundSpikeSpeed: 0
+  groundSpikeForward: 2.2
+  groundSpikeFootDrop: 0.5
+  groundSpikeRange: 5
+  groundSpikeFps: 14
+  groundSpikePixelsPerUnit: 108
+  meleeOffset: 0.6
+  meleeRadius: 1
+  rogueAttackDamage: 1
+  mageAttackDamage: 1
+  mageSmashDamage: 3
+  mageSmashRadiusBonus: 0.9
+  mageSmashEffectForward: 1
+  mageSmashEffectFps: 18
+  mageSmashPixelsPerUnit: 108
+  attackAnimSpeed: 1
+  skillCooldown: 3
   idleStateName: rogue_walk
   attackStateName: rogue_attack
   skillStateName: rogue_smash
-  rollStateName: rogue_walk

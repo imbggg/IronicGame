@@ -173,6 +173,14 @@ public class Player : MonoBehaviour
 
         currentHealth = maxHealth;
 
+        // 시작 시 가만히 서 있게 한다. isMoving 기본값이 false라서
+        // SetMoving(false)가 early return 해버려 걷기 애니메이션이 계속 돈다.
+        if (null != animator)
+        {
+            animator.speed = 0.0f;
+            animator.Play(0, 0, 0.0f);
+        }
+
         int index = (0 <= classIndexOverride)
             ? classIndexOverride
             : GameData.selectedCharacter;
@@ -283,14 +291,17 @@ public class Player : MonoBehaviour
 
         bool busy = (true == isAttacking || true == isUsingSkill);
 
-        if (true == Input.GetKeyDown(KeyCode.Z) && false == busy)
+        if (true == Input.GetKeyDown(KeyCode.Z)
+            && false == busy
+            && true == CanAttackFacing(false))
         {
             StartCoroutine(Attack());
         }
 
         if (true == Input.GetKeyDown(KeyCode.X)
             && false == busy
-            && 0.0f >= skillCooldownRemaining)
+            && 0.0f >= skillCooldownRemaining
+            && true == CanAttackFacing(true))
         {
             skillCooldownRemaining = skillCooldown;
             StartCoroutine(Skill());
@@ -361,6 +372,27 @@ public class Player : MonoBehaviour
     }
 
     // --- 공격 ---------------------------------------------------------
+
+    /// <summary>
+    /// 도적 Z, 마법사 Z/X는 위/아래 성분이 있는 방향(대각선 포함)이면 발동하지 않는다.
+    /// 모션도 데미지도 없고, 스킬 쿨타임도 소모하지 않는다.
+    /// 정확히 좌/우를 보고 있을 때만 발동한다.
+    /// </summary>
+    private bool CanAttackFacing(bool isSkill)
+    {
+        bool facingVertical = (Mathf.Abs(lastMoveDirection.y) > 0.01f);
+
+        switch (characterClass)
+        {
+            case CharacterClass.Rogue:
+                // 도적은 Z만 막고, X(지면 융기)는 모든 방향 허용.
+                return (true == isSkill) || (false == facingVertical);
+            case CharacterClass.Mage:
+                return false == facingVertical;
+            default:
+                return true;
+        }
+    }
 
     /// <summary>
     /// Z. 궁수는 화살, 도적과 마법사는 근접.
